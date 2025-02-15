@@ -10,9 +10,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "folders")
+@Data
 public class Folder {
 
     @Id
@@ -43,55 +45,5 @@ public class Folder {
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("folder")
     private List<Document> documents = new ArrayList<>(); // List of documents in this folder.
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getFolderName() {
-		return folderName;
-	}
-
-	public void setFolderName(String folderName) {
-		this.folderName = folderName;
-	}
-
-	public Users getUser() {
-		return user;
-	}
-
-	public void setUser(Users user) {
-		this.user = user;
-	}
-
-	public Folder getParentFolder() {
-		return parentFolder;
-	}
-
-	public void setParentFolder(Folder parentFolder) {
-		this.parentFolder = parentFolder;
-	}
-
-	public List<Folder> getSubfolders() {
-		return subfolders;
-	}
-
-	public void setSubfolders(List<Folder> subfolders) {
-		this.subfolders = subfolders;
-	}
-
-	public List<Document> getDocuments() {
-		return documents;
-	}
-
-	public void setDocuments(List<Document> documents) {
-		this.documents = documents;
-	}
-    
-    
-    
+ 
 }

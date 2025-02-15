@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "documents")
+@Data
 public class Document {
 
     @Id
@@ -38,80 +40,6 @@ public class Document {
 
     @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, orphanRemoval = true)
     private SearchIndex searchIndex; // Indexed text for fast searching.
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	
-
-	public String getDocumentName() {
-		return documentName;
-	}
-
-	public void setDocumentName(String documentName) {
-		this.documentName = documentName;
-	}
-
-	public String getFileType() {
-		return fileType;
-	}
-
-	public void setFileType(String fileType) {
-		this.fileType = fileType;
-	}
-
-	public String getS3Url() {
-		return s3Url;
-	}
-
-	public void setS3Url(String s3Url) {
-		this.s3Url = s3Url;
-	}
-
-	public LocalDateTime getUploadedAt() {
-		return uploadedAt;
-	}
-
-	public void setUploadedAt(LocalDateTime uploadedAt) {
-		this.uploadedAt = uploadedAt;
-	}
-
-	public Folder getFolder() {
-		return folder;
-	}
-
-	public void setFolder(Folder folder) {
-		this.folder = folder;
-	}
-
-	public Users getUser() {
-		return user;
-	}
-
-	public void setUser(Users user) {
-		this.user = user;
-	}
-
-	public DocumentAnalysis getAnalysis() {
-		return analysis;
-	}
-
-	public void setAnalysis(DocumentAnalysis analysis) {
-		this.analysis = analysis;
-	}
-
-	public SearchIndex getSearchIndex() {
-		return searchIndex;
-	}
-
-	public void setSearchIndex(SearchIndex searchIndex) {
-		this.searchIndex = searchIndex;
-	}
 
     
 }

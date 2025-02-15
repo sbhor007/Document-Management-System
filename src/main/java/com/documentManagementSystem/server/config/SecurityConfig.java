@@ -36,7 +36,6 @@ public class SecurityConfig {
 		return http.csrf(Customizer -> Customizer.disable())
 
 				.authorizeHttpRequests(request -> request
-//						.requestMatchers("/api/folders/**").authenticated()
 						.requestMatchers("/api/auth/register","/helth","/api/auth/logins","/sendOtp","/validateOtp/**")
 						.permitAll()
 						.anyRequest().authenticated()

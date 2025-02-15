@@ -21,8 +21,11 @@ import com.documentManagementSystem.server.entity.Users;
 import com.documentManagementSystem.server.responce.ApiResponce;
 import com.documentManagementSystem.server.service.AuthService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/api/auth")
+@Slf4j
 public class AuthController {
 
 	 @Autowired
@@ -31,7 +34,7 @@ public class AuthController {
 	    @PostMapping("/register")
 	    public ResponseEntity<ApiResponce<?>> register(@RequestBody Users user) {
 	        try {
-	        	System.out.println(user);
+	        	log.info("user Registation Data {}",user);
 	            Users savedUser = userService.register(user);
 	            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponce<>("success", "User registered successfully", savedUser));  // 201 Created
 	        } catch (Exception e) {
@@ -41,7 +44,7 @@ public class AuthController {
 
 	    @PostMapping("/logins")
 	    public ResponseEntity<ApiResponce<?>> login(@RequestBody Users user) {
-	    	System.out.println(user);
+	    	log.info("Login credentials {}",user);
 	        String jwtToken = userService.verify(user);
 	        if (jwtToken != null) {
 	        	Map<String, Object> tokenDetails = new HashMap<String, Object>();

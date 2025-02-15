@@ -19,12 +19,17 @@ public class FolderService {
     private FolderRepository folderRepository;
 	@Autowired
     private UsersRepository userRepository;
+	
+	@Autowired
+	private UserService userService;
 
     // Create a new folder
-    public FolderResponse createFolder(FolderRequest request) {
+    public FolderResponse createFolder(FolderRequest request,String username) {
     	System.out.println(request);
-        Users user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        Users user = userService.findUserByUserName(username);
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+        if(user == null)
+        	throw new RuntimeException("User not found");
 
         Folder folder = new Folder();
         folder.setFolderName(request.getFolderName());
@@ -48,11 +53,16 @@ public class FolderService {
     }
 
     // Get all folders for a user
-    public List<FolderResponse> getUserFolders(Long userId) {
-        return folderRepository.findByUserId(userId)
+    public List<FolderResponse> getAllFolders(String username) {
+       /* return folderRepository.findByUserId(userId)
                 .stream()
                 .map(FolderResponse::new)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
+    	return userService.findUserByUserName(username)
+    			.getFolders()
+    			.stream()
+    			.map(FolderResponse::new)
+    			.collect(Collectors.toList());
     }
 
     // Delete a folder (and all subfolders/documents)
@@ -61,4 +71,6 @@ public class FolderService {
                 .orElseThrow(() -> new RuntimeException("Folder not found"));
         folderRepository.delete(folder);
     }
+    
+    
 }

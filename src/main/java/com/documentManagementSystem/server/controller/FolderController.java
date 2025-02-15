@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,9 +31,14 @@ public class FolderController {
 
     // Create a new folder
     @PostMapping("/create-folder")
-    public ResponseEntity<FolderResponse> createFolder(@RequestBody FolderRequest request) {
+    public ResponseEntity<FolderResponse> createFolder(
+    		@RequestBody FolderRequest request,
+    		Authentication authentication
+    		) {
+    	String username = authentication.getName();
+    	System.out.println(username); //TODO: debugging purpose line
     	System.out.println("folder-api : " + request);
-        return ResponseEntity.ok(folderService.createFolder(request));
+        return ResponseEntity.ok(folderService.createFolder(request,username));
     }
 
     // Get folder details (including subfolders)
@@ -42,9 +48,10 @@ public class FolderController {
     }
 
     // Get all folders for a user
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<FolderResponse>> getUserFolders(@PathVariable Long userId) {
-        return ResponseEntity.ok(folderService.getUserFolders(userId));
+    @GetMapping("/all-folders")
+    public ResponseEntity<List<FolderResponse>> getAllFolders(Authentication authentication) {
+    	String username = authentication.getName();
+        return ResponseEntity.ok(folderService.getAllFolders(username));
     }
 
     // Delete a folder (optional: delete subfolders/documents)

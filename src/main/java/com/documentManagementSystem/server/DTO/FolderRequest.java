@@ -3,7 +3,7 @@ package com.documentManagementSystem.server.DTO;
 public class FolderRequest {
 	
 	private String folderName;
-    private Long userId;
+//    private Long userId;
     private Long parentFolderId;
     
 	public String getFolderName() {
@@ -12,12 +12,12 @@ public class FolderRequest {
 	public void setFolderName(String folderName) {
 		this.folderName = folderName;
 	}
-	public Long getUserId() {
-		return userId;
-	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+//	public Long getUserId() {
+//		return userId;
+//	}
+//	public void setUserId(Long userId) {
+//		this.userId = userId;
+//	}
 	public Long getParentFolderId() {
 		return parentFolderId;
 	}
@@ -26,7 +26,7 @@ public class FolderRequest {
 	}
 	@Override
 	public String toString() {
-		return "FolderRequest [folderName=" + folderName + ", userId=" + userId + ", parentFolderId=" + parentFolderId
+		return "FolderRequest [folderName=" + folderName +  ", parentFolderId=" + parentFolderId
 				+ "]";
 	} 
     

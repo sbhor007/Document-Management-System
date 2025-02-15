@@ -23,6 +23,10 @@ public class UserService {
 		return user;
 	}
 	
+	public Users findUserByUserName(String username) {
+		return userRepositiory.findByUserName(username);
+	}
+	
 	
 	
 }
