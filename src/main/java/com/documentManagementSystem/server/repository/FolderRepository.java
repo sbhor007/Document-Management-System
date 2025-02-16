@@ -9,5 +9,5 @@ import com.documentManagementSystem.server.entity.Folder;
 
 @Repository
 public interface FolderRepository extends JpaRepository<Folder, Long> {
-	List<Folder> findByUserId(Long userId);  // This will fetch folders by userId
+	List<Folder> findByUser_UserName(String userName); // This will fetch folders by users userName
 }

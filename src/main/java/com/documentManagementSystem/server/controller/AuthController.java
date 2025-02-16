@@ -67,7 +67,7 @@ public class AuthController {
 	    @GetMapping("/{userId}")
 	    public ResponseEntity<ApiResponce<?>> getUserById(@PathVariable Long userId){
 	    	Users user = userService.getUserById(userId);
-	    	System.out.println(user);
+	    	log.info("User Details {}",user);
 	    	return ResponseEntity.status(HttpStatus.OK).body(new ApiResponce("success", "user fetched successfully", user));
 	    }
 }

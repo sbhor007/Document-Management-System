@@ -43,8 +43,8 @@ public class FolderController {
 
     // Get folder details (including subfolders)
     @GetMapping("/{folderId}")
-    public ResponseEntity<FolderResponse> getFolderDetails(@PathVariable Long folderId) {
-        return ResponseEntity.ok(folderService.getFolderDetails(folderId));
+    public ResponseEntity<FolderResponse> getFolderDetails(@PathVariable Long folderId,Authentication authentication) {
+        return ResponseEntity.ok(folderService.getFolderDetails(folderId,authentication.getName()));
     }
 
     // Get all folders for a user
