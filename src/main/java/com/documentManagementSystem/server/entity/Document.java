@@ -3,6 +3,8 @@ package com.documentManagementSystem.server.entity;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -29,10 +31,12 @@ public class Document {
 
     @ManyToOne
     @JoinColumn(name = "folder_id", nullable = false)
+    @JsonIgnoreProperties({"documents", "subfolders", "user"})
     private Folder folder; // The folder where this document is stored.
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"documents", "folders", "password"})
     private Users user; // The user who uploaded the document.
 
     @OneToOne(mappedBy = "document", cascade = CascadeType.ALL, orphanRemoval = true)

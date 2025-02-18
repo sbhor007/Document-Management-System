@@ -24,26 +24,23 @@ public class Folder {
     @Column(nullable = false)
     private String folderName;
     
-//    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnoreProperties({"folders", "documents", "password"})
     private Users user; // The owner of this folder.
 
-//    @JsonBackReference(value = "parent-folder")
     @ManyToOne
     @JoinColumn(name = "parent_folder_id")
-    @JsonIgnoreProperties({"subfolders", "documents", "user"})
+    @JsonIgnoreProperties({"subfolders", "documents", "user", "parentFolder"})
     private Folder parentFolder; // Parent folder (NULL if it's a root folder).
 
-//    @JsonManagedReference(value = "parent-folder")
+
     @OneToMany(mappedBy = "parentFolder", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("parentFolder")
+    @JsonIgnoreProperties({"parentFolder", "documents", "user"})
     private List<Folder> subfolders = new ArrayList<Folder>(); // List of subfolders.
 
-//    @JsonManagedReference
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("folder")
+    @JsonIgnoreProperties({"folder", "user"})
     private List<Document> documents = new ArrayList<>(); // List of documents in this folder.
  
 }

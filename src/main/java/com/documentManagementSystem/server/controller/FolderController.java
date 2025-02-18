@@ -17,8 +17,12 @@ import com.documentManagementSystem.server.DTO.FolderRequest;
 import com.documentManagementSystem.server.DTO.FolderResponse;
 import com.documentManagementSystem.server.service.FolderService;
 
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/api/folders")
+@Slf4j
 public class FolderController {
 	
 	@Autowired
@@ -36,8 +40,8 @@ public class FolderController {
     		Authentication authentication
     		) {
     	String username = authentication.getName();
-    	System.out.println(username); //TODO: debugging purpose line
-    	System.out.println("folder-api : " + request);
+    	log.info("username is : {}",username);
+    	log.info("Folder-Api : {}",request);
         return ResponseEntity.ok(folderService.createFolder(request,username));
     }
 
@@ -56,8 +60,8 @@ public class FolderController {
 
     // Delete a folder (optional: delete subfolders/documents)
     @DeleteMapping("/{folderId}")
-    public ResponseEntity<String> deleteFolder(@PathVariable Long folderId) {
-        folderService.deleteFolder(folderId);
+    public ResponseEntity<String> deleteFolder(@PathVariable Long folderId,Authentication authentication) {
+        folderService.deleteFolder(folderId,authentication.getName());
         return ResponseEntity.ok("Folder deleted successfully.");
     }
 }

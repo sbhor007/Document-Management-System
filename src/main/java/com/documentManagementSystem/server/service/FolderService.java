@@ -63,8 +63,12 @@ public class FolderService {
 	}
 
 	// Delete a folder (and all subfolders/documents)
-	public void deleteFolder(Long folderId) {
+	public void deleteFolder(Long folderId,String username) {
 		Folder folder = folderRepository.findById(folderId).orElseThrow(() -> new RuntimeException("Folder not found"));
+		
+		if(!folder.getUser().getUserName().equals(username)) {
+			throw new RuntimeException("Access denied: You do not own this folder");
+		}
 		folderRepository.delete(folder);
 	}
 
