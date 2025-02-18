@@ -3,6 +3,7 @@ package com.documentManagementSystem.server.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.documentManagementSystem.server.DTO.FolderRequest;
 import com.documentManagementSystem.server.DTO.FolderResponse;
+import com.documentManagementSystem.server.responce.ApiResponce;
 import com.documentManagementSystem.server.service.FolderService;
 
 import lombok.extern.java.Log;
@@ -53,9 +55,10 @@ public class FolderController {
 
     // Get all folders for a user
     @GetMapping("/all-folders")
-    public ResponseEntity<List<FolderResponse>> getAllFolders(Authentication authentication) {
-    	String username = authentication.getName();
-        return ResponseEntity.ok(folderService.getAllFolders(username));
+    public ResponseEntity<ApiResponce<List<FolderResponse>>> getAllFolders(Authentication authentication) {
+    	log.info("all-folders are called");
+    	return ResponseEntity.status(HttpStatus.OK).body(new ApiResponce("success", "folders fached successfully",folderService.getAllFolders(authentication.getName())));
+//        return ResponseEntity.ok(folderService.getAllFolders(authentication.getName()));
     }
 
     // Delete a folder (optional: delete subfolders/documents)

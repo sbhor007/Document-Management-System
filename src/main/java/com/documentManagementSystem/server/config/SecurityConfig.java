@@ -40,11 +40,12 @@ public class SecurityConfig {
 						.permitAll()
 						.anyRequest().authenticated()
 						)
-//				.authenticationProvider(authenticationProvider()) // ✅ Ensure authentication is handled
+				.authenticationProvider(authenticationProvider()) 
 				.sessionManagement(session ->session
 						.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 						)
 				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class)
 				.build();
 				
 	}
@@ -62,7 +63,8 @@ public class SecurityConfig {
             "X-Requested-With",
             "Access-Control-Request-Method",
             "Access-Control-Request-Headers",
-            "Access-Control-Allow-Origin"
+            "Access-Control-Allow-Origin",
+            "Access-Control-Allow-Headers"
         ));
         configuration.setExposedHeaders(Arrays.asList(
             "Access-Control-Allow-Origin",
