@@ -14,4 +14,9 @@ export class FolderService {
   getAllFolders(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/all-folders`)
   }
+
+  createFolder(folder: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/create-folder`, folder)
+  }
+
 }
