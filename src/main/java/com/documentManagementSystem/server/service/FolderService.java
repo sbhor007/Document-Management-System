@@ -31,6 +31,7 @@ public class FolderService {
 
 		Folder folder = new Folder();
 		folder.setFolderName(request.getFolderName());
+		folder.setFolderDescription(request.getFolderDescription());
 		folder.setUser(user);
 
 		if (request.getParentFolderId() != null) {

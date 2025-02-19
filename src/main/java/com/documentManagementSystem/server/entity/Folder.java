@@ -24,6 +24,9 @@ public class Folder {
     @Column(nullable = false)
     private String folderName;
     
+    @Column(nullable = false)
+    private String folderDescription;
+    
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnoreProperties({"folders", "documents", "password"})
