@@ -19,5 +19,9 @@
 
   <i>create new base</i>
 </div>
-<div *ngIf="isVisible" class="transition-all">  <app-accept-folder-details></app-accept-folder-details>
+<div *ngIf="isVisible" class="transition-all">
+  <app-accept-folder-details
+    (folderCreated)="onFolderCreated()"
+    (closeModal)="onCloseModal()"
+  ></app-accept-folder-details>
 </div>

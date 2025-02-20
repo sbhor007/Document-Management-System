@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { FolderService } from '../../../service/folder.service';
 import {
@@ -17,6 +17,8 @@ import {
   styleUrl: './accept-folder-details.component.css',
 })
 export class AcceptFolderDetailsComponent implements OnInit {
+  @Output() folderCreated = new EventEmitter<void>();
+  @Output() closeModal = new EventEmitter<void>();
   createFolderForm: FormGroup;
   isVisible: boolean = true;
 
@@ -47,6 +49,7 @@ export class AcceptFolderDetailsComponent implements OnInit {
     if(this.createFolderForm.valid){
       this.folderService.createFolder(this.createFolderForm.value).subscribe((data)=>{
         console.log(data);
+        this.folderCreated.emit();
         // this.router.navigate(['/folders']);
         alert('Folder created successfully');
         this.close();
@@ -59,9 +62,20 @@ export class AcceptFolderDetailsComponent implements OnInit {
     )
     }
   }
+  updateFolderData(){
+    this.folderService.getAllFolders().subscribe(folders =>{
+      console.log(`updated folders : ${folders}`);
+      alert("Foldes Updated")
+    },
+    (error) =>{
+      console.log(`error while updating folders : ${error}`);
+    }
+  )
+  }
 
   close() {
-    this.isVisible = !this.isVisible;
+    this.isVisible = false;
+    this.folderCreated.emit();
   }
   acceptFolderDetails(folderDetails: any) {
     this.folderService.createFolder(folderDetails).subscribe((data: any) => {
