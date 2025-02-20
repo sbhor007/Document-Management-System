@@ -56,7 +56,7 @@ public class FolderController {
     // Get all folders for a user
     @GetMapping("/all-folders")
     public ResponseEntity<ApiResponce<List<FolderResponse>>> getAllFolders(Authentication authentication) {
-    	log.info("all-folders are called");
+    	log.info("all-folders are called : {}",folderService.getAllFolders(authentication.getName()));
     	return ResponseEntity.status(HttpStatus.OK).body(new ApiResponce("success", "folders fached successfully",folderService.getAllFolders(authentication.getName())));
 //        return ResponseEntity.ok(folderService.getAllFolders(authentication.getName()));
     }

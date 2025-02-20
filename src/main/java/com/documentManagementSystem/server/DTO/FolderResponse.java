@@ -11,6 +11,8 @@ import lombok.Data;
 public class FolderResponse {
 	private Long folderId;
     private String folderName;
+    private String folderDescription;
+    
     private Long userId;
     private Long parentFolderId;
     private List<String> subfolders;
@@ -19,6 +21,7 @@ public class FolderResponse {
     public FolderResponse(Folder folder) {
         this.folderId = folder.getId();
         this.folderName = folder.getFolderName();
+        this.folderDescription = folder.getFolderDescription();
         this.userId = folder.getUser().getId();
         this.parentFolderId = folder.getParentFolder() != null ? folder.getParentFolder().getId() : null;
         this.subfolders = folder.getSubfolders().stream().map(Folder::getFolderName).collect(Collectors.toList());

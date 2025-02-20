@@ -1,8 +1,8 @@
 <div class="w-full mb-6 flex items-center gap-5 flex-wrap">
-    <app-create-folder></app-create-folder>
+    <app-create-folder (folderCreated)="onFolderCreated()"></app-create-folder>
     
-    <ng-container *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9]">
-        <app-folder></app-folder>
+    <ng-container *ngFor="let folder of folders.data">
+        <app-folder [folder]="folder"></app-folder>
     </ng-container>
     
 </div>
