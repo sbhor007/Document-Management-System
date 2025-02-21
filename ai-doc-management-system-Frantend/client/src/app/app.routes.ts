@@ -7,6 +7,9 @@ import { UserDashboardComponent } from './componets/user-dashboard/user-dashboar
 import { DashBoardLayoutComponent } from './componets/dash-board-layout/dash-board-layout.component';
 import path from 'path';
 import { Component } from '@angular/core';
+import { DocumentDetailsComponent } from './componets/documents/document-details/document-details.component';
+import { DocumentLayoutComponent } from './componets/documents/document-layout/document-layout.component';
+import { UploadDocumentsComponent } from './componets/documents/upload-documents/upload-documents.component';
 
 export const routes: Routes = [
     {
@@ -39,6 +42,24 @@ export const routes: Routes = [
           {
             path: 'dashboard',
             component: UserDashboardComponent
+          },
+          {
+            path:'document-details',
+            component:DocumentDetailsComponent
+          }
+        ]
+      },
+      {
+        path:'documents-dashboard',
+        component:DocumentLayoutComponent,
+        children:[
+          {
+            path:'upload-document',
+            component:UploadDocumentsComponent
+          },
+          {
+            path:'document-details',
+            component:DocumentDetailsComponent
           }
         ]
       }

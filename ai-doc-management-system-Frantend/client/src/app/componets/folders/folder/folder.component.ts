@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-folder',
@@ -10,10 +11,16 @@ export class FolderComponent implements OnInit {
 
   @Input() folder:any
 
+  constructor(private router:Router){}
+
   ngOnInit() {
     console.log(this.folder);
     
   }
 
-  openFolder() {}
+  openFolder() {
+    alert("Folder Operned");
+
+    this.router.navigate(['/documents-dashboard'], { state: { folder: this.folder } });
+  }
 }

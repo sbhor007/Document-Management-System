@@ -1,5 +1,5 @@
 import { Component, NgModule } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
 import { FolderService } from '../../service/folder.service';
 import { CreateFolderComponent } from "../folders/create-folder/create-folder.component";
@@ -9,7 +9,7 @@ import { AcceptFolderDetailsComponent } from "../folders/accept-folder-details/a
 
 @Component({
   selector: 'app-user-dashboard',
-  imports: [CreateFolderComponent, FolderComponent, CommonModule, AcceptFolderDetailsComponent],
+  imports: [CreateFolderComponent, FolderComponent, CommonModule, AcceptFolderDetailsComponent,RouterOutlet],
   templateUrl: './user-dashboard.component.html',
   styleUrl: './user-dashboard.component.css'
 })
