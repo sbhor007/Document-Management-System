@@ -121,7 +121,7 @@ public class DocumentService {
 	        log.info("Successfully deleted document with ID: {}", id);
 	        
 	        // If you're using S3 or other storage, add cleanup here
-	        // deleteFromS3(document.getS3Url());
+//	         deleteFromS3(document.getS3Url());
 	        
 	    } catch (Exception e) {
 	        log.error("Error deleting document with ID {}: {}", id, e.getMessage());
