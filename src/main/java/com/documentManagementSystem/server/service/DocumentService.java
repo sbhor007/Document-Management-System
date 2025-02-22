@@ -32,7 +32,7 @@ public class DocumentService {
 	@Autowired
 	private FolderRepository folderRepository;
 
-	/*public void uploadDocument(MultipartFile[] files, Long folderId, String username) throws IOException {
+	public void uploadDocument(MultipartFile[] files, Long folderId, String username) throws IOException {
 	    log.info("Uploading documents for folder ID: {} and username: {}", folderId, username);
 	    Folder folder = folderRepository.findById(folderId)
 	            .orElseThrow(() -> new RuntimeException("Folder not found"));
@@ -58,7 +58,8 @@ public class DocumentService {
 	    documentRepository.saveAll(documents);
 	    log.info("Documents uploaded successfully");
 	}
-*/
+
+	/*
 	public void uploadDocument(MultipartFile file, Long folderId, String username) throws IOException {
 		log.info("uploading documents for folder ID: {} and username: {}", folderId, username);
 		Folder folder = folderRepository.findById(folderId)
@@ -80,7 +81,7 @@ public class DocumentService {
 		log.info("document uploaded successfuly");
 		documentRepository.save(document);
 	}
-	
+	*/
 	public Document getDocumentById(Long id,String username) {
 		log.info("Fetching document by document ID: {} and username: {}", id, username);
 		Document document =  documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));

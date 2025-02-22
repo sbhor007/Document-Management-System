@@ -52,6 +52,6 @@ export class DocumentDetailsComponent implements OnInit {
 
   searchDocument() {}
   openUploadModal() {
-    this.router.navigate(['/documents/upload']);
+    this.router.navigate(['/documents/upload/',this.receivedDocuments.folderId]);
   }
 }

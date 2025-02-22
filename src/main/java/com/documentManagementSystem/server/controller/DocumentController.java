@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.documentManagementSystem.server.entity.Document;
+import com.documentManagementSystem.server.responce.ApiResponce;
 import com.documentManagementSystem.server.service.DocumentService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,9 +35,9 @@ public class DocumentController {
 		return "ALL is Good";
 	}
 
-	/*
-	@PostMapping(value = "/upload/{folderId}", consumes = "multipart/form-data")
-	public ResponseEntity<String> uploadDocuments(
+//	@PostMapping(value = "/upload/{folderId}", consumes = "multipart/form-data")
+	@PostMapping("/upload/{folderId}")
+	public ResponseEntity<?> uploadDocuments(
 			@RequestParam("files") MultipartFile[] files,
 	        @PathVariable Long folderId,
 	        Authentication authentication,
@@ -53,13 +55,13 @@ public class DocumentController {
 	            log.info("File received: {} (Size: {} bytes)", file.getOriginalFilename(), file.getSize());
 	        }
 	        documentService.uploadDocument(files, folderId, authentication.getName());
-	        return ResponseEntity.ok("Documents uploaded successfully");
+	        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponce("success", "Documents uploaded successfully"));
 	    } catch (IOException e) {
 	        return ResponseEntity.status(500).body("Error uploading documents: " + e.getMessage());
 	    }
 	}
-	*/
-	@PostMapping("/upload/{folderId}")
+	
+	/*@PostMapping("/upload/{folderId}")
 	public ResponseEntity<String> uploadDocument(
 			@RequestParam("file") MultipartFile file,
 			@PathVariable Long folderId,
@@ -73,7 +75,7 @@ public class DocumentController {
 		} catch (IOException e) {
 			return ResponseEntity.status(500).body("Error uploading document: " + e.getMessage());
 		}
-	}
+	}*/
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Document> getDocumentById(@PathVariable Long id, Authentication authentication) {

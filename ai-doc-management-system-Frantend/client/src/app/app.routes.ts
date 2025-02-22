@@ -102,7 +102,7 @@ export const routes: Routes = [
         component: DocumentDetailsComponent
       },
       {
-        path: 'upload',
+        path: 'upload/:folderId',
         component: UploadDocumentsComponent
       }
     ]

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { DocumentService } from '../../../service/document.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-upload-documents',
@@ -11,16 +12,21 @@ import { DocumentService } from '../../../service/document.service';
 })
 export class UploadDocumentsComponent {
     uploadedFiles: File[] = [];
-
-    constructor(private documentService: DocumentService) { }
+    folderId: number |null = null;
+    constructor(private documentService: DocumentService,private route:ActivatedRoute) {
+      const folderPar = this.route.snapshot.paramMap.get('folderId')
+      this.folderId = folderPar ? parseInt(folderPar) : null;
+      console.log('Folder ID:', this.folderId);
+      
+     }
 
     onFileSelected(event: any) {
       const files: FileList = event.target.files;
       for (let i = 0; i < files.length; i++) {
-        if(files[i].type == 'application/pdf') {
+        // if(files[i].type == 'application/pdf') {
           // alert('Only PDF files are allowed');
           this.uploadedFiles.push(files[i]);
-        }
+        // }
       }
     }
   
@@ -47,10 +53,18 @@ export class UploadDocumentsComponent {
     }
   
     uploadFiles() {
-      const folderId = 1; // Replace with dynamic folder ID
-      this.documentService.uploadDocuments(this.uploadedFiles, folderId).subscribe({
-        next: response => console.log('Upload success', response),
-        error: err => console.error('Upload error', err)
+      if (this.uploadedFiles.length === 0 || !this.folderId) {
+        console.error('No files or folderId provided');
+        return;
+      }
+      this.documentService.uploadDocuments(this.uploadedFiles, this.folderId).subscribe({
+        next: response => {
+          console.log('Upload success', response)
+          this.uploadedFiles = [];
+        },
+        error: err => {
+          console.error('Upload error', err)
+        }
       });
     }
     
