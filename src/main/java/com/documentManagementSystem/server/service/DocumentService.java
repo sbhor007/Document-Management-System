@@ -59,29 +59,7 @@ public class DocumentService {
 	    log.info("Documents uploaded successfully");
 	}
 
-	/*
-	public void uploadDocument(MultipartFile file, Long folderId, String username) throws IOException {
-		log.info("uploading documents for folder ID: {} and username: {}", folderId, username);
-		Folder folder = folderRepository.findById(folderId)
-	                .orElseThrow(() -> new RuntimeException("Folder not found"));
-	        
-		log.info("Document service Username : {}",username);
-	        if (!folder.getUser().getUserName().equals(username)) {
-	        	log.warn("Unauthorized access upload to document {} by user {}", folderId, username);
-	            throw new RuntimeException("Unauthorized to upload to this folder");
-	        }
-
-		// Create a new document entity
-		Document document = new Document();
-		document.setDocumentName(file.getOriginalFilename()); // Set document name from uploaded file
-		document.setFileType(file.getContentType()); // Set file type from uploaded file metadata
-		document.setFolder(folder); // Associate document with the selected folder
-		document.setUser(folder.getUser()); // Associate document with the authenticated user
-		document.setS3Url("Santosh");
-		log.info("document uploaded successfuly");
-		documentRepository.save(document);
-	}
-	*/
+	
 	public Document getDocumentById(Long id,String username) {
 		log.info("Fetching document by document ID: {} and username: {}", id, username);
 		Document document =  documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));
