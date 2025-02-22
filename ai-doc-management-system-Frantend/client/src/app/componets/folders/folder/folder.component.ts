@@ -1,26 +1,31 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-folder',
   imports: [],
   templateUrl: './folder.component.html',
-  styleUrl: './folder.component.css'
+  styleUrl: './folder.component.css',
 })
 export class FolderComponent implements OnInit {
+  @Input() folder: any;
 
-  @Input() folder:any
-
-  constructor(private router:Router){}
+  constructor(private router: Router, private myTost: ToastrService) {}
 
   ngOnInit() {
     console.log(this.folder);
-    
   }
 
-  openFolder() {
-    alert("Folder Operned");
+  openFolder(myFolder: any) {
+    alert("Folder Opened");
+    console.log('Folder Opened', myFolder);
 
-    this.router.navigate(['/documents'], { state: { folder: this.folder } });
+    this.myTost.success('Folder Opened');
+
+    this.router.navigate(['/documents/details', myFolder.folderId], {
+      state: { documents: myFolder },
+    });
   }
+  
 }

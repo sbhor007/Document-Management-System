@@ -1,7 +1,10 @@
 package com.documentManagementSystem.server.service;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,33 @@ public class DocumentService {
 	@Autowired
 	private FolderRepository folderRepository;
 
+	/*public void uploadDocument(MultipartFile[] files, Long folderId, String username) throws IOException {
+	    log.info("Uploading documents for folder ID: {} and username: {}", folderId, username);
+	    Folder folder = folderRepository.findById(folderId)
+	            .orElseThrow(() -> new RuntimeException("Folder not found"));
+
+	    log.info("Document service Username: {}", username);
+	    if (!folder.getUser().getUserName().equals(username)) {
+	        log.warn("Unauthorized access upload to document {} by user {}", folderId, username);
+	        throw new RuntimeException("Unauthorized to upload to this folder");
+	    }
+
+
+	    List<Document> documents = Arrays.stream(files)
+	    		.map(file ->{
+	    			Document document = new Document();
+	                document.setDocumentName(file.getOriginalFilename());
+	                document.setFileType(file.getContentType());
+	                document.setFolder(folder);
+	                document.setUser(folder.getUser());
+	                document.setS3Url("Santosh");
+	                return document;
+	    		})
+	    		.collect(Collectors.toList());
+	    documentRepository.saveAll(documents);
+	    log.info("Documents uploaded successfully");
+	}
+*/
 	public void uploadDocument(MultipartFile file, Long folderId, String username) throws IOException {
 		log.info("uploading documents for folder ID: {} and username: {}", folderId, username);
 		Folder folder = folderRepository.findById(folderId)
@@ -50,7 +80,7 @@ public class DocumentService {
 		log.info("document uploaded successfuly");
 		documentRepository.save(document);
 	}
-
+	
 	public Document getDocumentById(Long id,String username) {
 		log.info("Fetching document by document ID: {} and username: {}", id, username);
 		Document document =  documentRepository.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));

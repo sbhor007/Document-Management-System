@@ -94,11 +94,11 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'details',
+        redirectTo: '',
         pathMatch: 'full'
       },
       {
-        path: 'details',
+        path: 'details/:folderId',
         component: DocumentDetailsComponent
       },
       {
