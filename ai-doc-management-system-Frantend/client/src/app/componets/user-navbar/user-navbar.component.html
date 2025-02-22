@@ -3,14 +3,14 @@
       <!-- Main Menu -->
       <div class="flex-1">
         <ul class="space-y-2">
-          @for(item of mainMenu; track item.label) {
-            <li>
-              <button class="w-full flex items-center px-2 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+          <!-- @for(item of mainMenu; track item.label) { -->
+            <li *ngFor="let item of mainMenu">
+              <button class="w-full flex items-center px-2 py-2 text-gray-700 hover:bg-gray-100 rounded-lg" (click)="navigate(item.route)" >
                 <i [class]="item.icon"></i>
                 <span class="ml-3 text-sm font-medium">{{item.label}}</span>
               </button>
             </li>
-          }
+          <!-- } -->
         </ul>
 
         <!-- Recently Opened Section -->

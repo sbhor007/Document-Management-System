@@ -21,6 +21,6 @@ export class FolderComponent implements OnInit {
   openFolder() {
     alert("Folder Operned");
 
-    this.router.navigate(['/documents-dashboard'], { state: { folder: this.folder } });
+    this.router.navigate(['/documents'], { state: { folder: this.folder } });
   }
 }
