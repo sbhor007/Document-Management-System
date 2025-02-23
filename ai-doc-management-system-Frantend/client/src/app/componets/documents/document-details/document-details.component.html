@@ -66,10 +66,13 @@
           <button class="py-1.5 px-10 border rounded-md bg-white shadow-md">
             Delete
           </button>
-          <!-- </div> -->
-          <!-- <div></div> -->
         </div>
-        <div class="w-full h-screen"></div>
+        <div class="w-full h-screen flex gap-[23px] flex-wrap">
+          <ng-container *ngFor="let document of documents">
+            
+            <app-document [document]="document"></app-document>
+          </ng-container>
+        </div>
      
       
 </div>

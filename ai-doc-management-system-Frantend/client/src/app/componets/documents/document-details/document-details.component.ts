@@ -3,15 +3,17 @@ import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { DocumentComponent } from '../document/document.component';
 import { UploadDocumentsComponent } from '../upload-documents/upload-documents.component';
 import { DocumentService } from '../../../service/document.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-document-details',
-  imports: [RouterOutlet, DocumentComponent, UploadDocumentsComponent],
+  imports: [RouterOutlet, DocumentComponent, UploadDocumentsComponent,CommonModule],
   templateUrl: './document-details.component.html',
   styleUrl: './document-details.component.css',
 })
 export class DocumentDetailsComponent implements OnInit {
   receivedDocuments: any;
+  documents: any[] = [];
 
   constructor(
     private router: Router,
@@ -33,6 +35,7 @@ export class DocumentDetailsComponent implements OnInit {
   }
   ngOnInit() {
     this.getDocuments(); 
+    
   }
 
 
@@ -41,7 +44,9 @@ export class DocumentDetailsComponent implements OnInit {
     
     this.documentService.getDocuments(this.receivedDocuments.folderId).subscribe(
       (data) => {
-        console.log(data);
+        // console.log("document Data : ",data);
+        this.documents = data;  
+        console.log("document Data : ",this.documents);
       },
       (error) => {
         console.log(error);
