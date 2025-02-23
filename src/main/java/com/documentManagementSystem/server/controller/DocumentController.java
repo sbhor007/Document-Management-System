@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,25 +60,11 @@ public class DocumentController {
 	        documentService.uploadDocument(files, folderId, authentication.getName());
 	        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponce("success", "Documents uploaded successfully"));
 	    } catch (IOException e) {
+	    	log.error("Error uploading documents: {}", e.getMessage());
 	        return ResponseEntity.status(500).body("Error uploading documents: " + e.getMessage());
 	    }
 	}
 	
-	/*@PostMapping("/upload/{folderId}")
-	public ResponseEntity<String> uploadDocument(
-			@RequestParam("file") MultipartFile file,
-			@PathVariable Long folderId,
-			Authentication authentication
-			) {
-		try {
-			// Get the authenticated user's email/username
-			log.info("file {} : {}",folderId,authentication.getName());
-			documentService.uploadDocument(file, folderId,authentication.getName());
-			return ResponseEntity.ok("Document uploaded successfully");
-		} catch (IOException e) {
-			return ResponseEntity.status(500).body("Error uploading document: " + e.getMessage());
-		}
-	}*/
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Document> getDocumentById(@PathVariable Long id, Authentication authentication) {
@@ -97,6 +86,21 @@ public class DocumentController {
 		return ResponseEntity.ok(documentService.getAllDocumentsByUser(authentication.getName()));
 	}
 
+	@GetMapping("/download/{documentId}")
+	public ResponseEntity<Resource> downloadDocument(@PathVariable Long documentId,Authentication authentication){
+		try {
+			Resource fileResource = documentService.getDocumentFile(documentId, authentication.getName());
+			Document document = documentService.getDocumentById(documentId, authentication.getName());
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + document.getDocumentName() + "\"")
+	                .contentType(MediaType.parseMediaType(document.getFileType()))
+	                .body(fileResource);
+		} catch (Exception e) {
+			log.error("Error downloading document {}: {}", documentId, e.getMessage());
+	        return ResponseEntity.status(500).body(null);
+		}
+	}
+	
 	// Endpoint to delete a document
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteDocument(@PathVariable Long id, Authentication authentication) {
