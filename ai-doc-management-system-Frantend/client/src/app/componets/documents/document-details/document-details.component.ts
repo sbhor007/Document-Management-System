@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class DocumentDetailsComponent implements OnInit {
   receivedDocuments: any;
-  documents: any[] = [];
+  documents: any;
 
   constructor(
     private router: Router,
@@ -45,8 +45,8 @@ export class DocumentDetailsComponent implements OnInit {
     this.documentService.getDocuments(this.receivedDocuments.folderId).subscribe(
       (data) => {
         // console.log("document Data : ",data);
-        this.documents = data;  
-        console.log("document Data : ",this.documents);
+        this.documents = data;
+        console.log("document Data : ", this.documents);
       },
       (error) => {
         console.log(error);

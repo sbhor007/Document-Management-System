@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.documentManagementSystem.server.entity.Document;
-import com.documentManagementSystem.server.responce.ApiResponce;
+import com.documentManagementSystem.server.responce.ApiResponse;
 import com.documentManagementSystem.server.service.DocumentService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -58,10 +58,10 @@ public class DocumentController {
 	            log.info("File received: {} (Size: {} bytes)", file.getOriginalFilename(), file.getSize());
 	        }
 	        documentService.uploadDocument(files, folderId, authentication.getName());
-	        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponce("success", "Documents uploaded successfully"));
+	        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("success", "Documents uploaded successfully"));
 	    } catch (IOException e) {
 	    	log.error("Error uploading documents: {}", e.getMessage());
-	        return ResponseEntity.status(500).body("Error uploading documents: " + e.getMessage());
+	        return ResponseEntity.status(500).body(new ApiResponse("fail", "Error uploading documents: " + e.getMessage()));
 	    }
 	}
 	
@@ -74,11 +74,12 @@ public class DocumentController {
 
 	// Endpoint to fetch all documents in a folder
 	@GetMapping("/folder/{folderId}")
-	public ResponseEntity<List<Document>> getDocumentsByFolder(@PathVariable Long folderId,
+	public ResponseEntity<ApiResponse<?>> getDocumentsByFolder(@PathVariable Long folderId,
 			Authentication authentication) {
 		log.info("Folder ID : {}",folderId);
 		List<Document> documents = documentService.getDocumentsByFolder(folderId, authentication.getName());
-		return ResponseEntity.ok(documents);
+		 return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("success", "getting all documents inside that folder successfully",documents));
+//		return ResponseEntity.ok(documents);
 	}
 
 	@GetMapping

@@ -68,13 +68,13 @@
           </button>
         </div>
         <div class="w-full h-screen flex gap-[23px] flex-wrap">
-          <!-- <ng-container *ngFor="let document of documents"> -->
+          <ng-container *ngFor="let document of documents.data">
             
 
-              <!-- <app-document [document]="document"></app-document> -->
-              <app-document [document]="documents"></app-document>
+              <app-document [document]="document"></app-document>
+              <!-- <app-document [document]="documents"></app-document> -->
            
-          <!-- </ng-container> -->
+          </ng-container>
         </div>
      
       

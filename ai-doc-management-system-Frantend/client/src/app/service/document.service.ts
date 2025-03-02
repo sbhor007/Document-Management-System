@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DocumentService {
-  baseUrl = 'http://localhost:8080/api/documents';
+  baseUrl = 'http://localhost:8080/api/documentsV1';
   constructor(private http:HttpClient) { }
 
   uploadDocuments(file: File[],folderId:number):Observable<any> {
