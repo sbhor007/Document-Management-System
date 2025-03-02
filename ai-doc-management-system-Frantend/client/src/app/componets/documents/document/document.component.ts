@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-document',
@@ -10,6 +11,8 @@ export class DocumentComponent implements OnInit {
 
   @Input() document:any;
 
+  constructor(private router:Router) { }
+
   ngOnInit(): void {
     console.log('type',typeof(this.document));
     
@@ -17,5 +20,8 @@ export class DocumentComponent implements OnInit {
       
   }
 
-  openDocument(){}
+  openDocument(){
+    this.router.navigate(['/documents/view-document',this.document])
+    alert("document opened")
+  }
 }

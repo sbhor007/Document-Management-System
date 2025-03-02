@@ -178,26 +178,48 @@ public class DocumentService {
 		return new FileSystemResource(file);
 	}
 	
-	public void deleteDocument(Long id, String username) {
-		log.info("Attempting to delete document with ID: {} by user: {}", id, username);
+	public void deleteDocument(Long documentId, String username) {
+		log.info("Attempting to delete document with ID: {} by user: {}", documentId, username);
 
-		Document document = documentRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Document not found with ID: " + id));
+		Document document = documentRepository.findById(documentId)
+				.orElseThrow(() -> new RuntimeException("Document not found with ID: " + documentId));
 
 		if (!document.getUser().getUserName().equals(username)) {
-			log.warn("Unauthorized deletion attempt of document {} by user {}", id, username);
+			log.warn("Unauthorized deletion attempt of document {} by user {}", documentId, username);
 			throw new RuntimeException("Unauthorized: You don't have permission to delete this document");
 		}
 
 		try {
+			
+			Path filePath = Paths.get(document.getS3Url());
+			Files.deleteIfExists(filePath);
+			log.info("Deleted file from local storage: {}", filePath);
+			
+			//stored folder reference
+			Folder folder = document.getFolder();
+			/*documentRepository.delete(document);
+			log.info("Successfully deleted document with ID: {}", id);*/
+			
+			// Check and delete folder if empty (database)
+			List<Document> remainingDocs = documentRepository.findByFolderId(folder.getId());
+			
+			/*if(remainingDocs.isEmpty()) {
+				folderRepository.delete(folder);
+				log.info("Deleted empty folder with ID: {}", folder.getId());
+			}*/
+			
+			Path folderPath = Paths.get(uploadDir + folder.getFolderName());
+			if(Files.exists(folderPath) && Files.isDirectory(folderPath) && folderPath.toFile().list().length == 0) {
+				Files.delete(folderPath);
+                log.info("Deleted empty folder directory: {}", folderPath);
+			}
+			
 			documentRepository.delete(document);
-			log.info("Successfully deleted document with ID: {}", id);
+			log.info("Successfully deleted document with ID: {}", documentId);
 
-			// If you're using S3 or other storage, add cleanup here
-//	         deleteFromS3(document.getS3Url());
 
 		} catch (Exception e) {
-			log.error("Error deleting document with ID {}: {}", id, e.getMessage());
+			log.error("Error deleting document with ID {}: {}", documentId, e.getMessage());
 			throw new RuntimeException("Failed to delete document: " + e.getMessage());
 		}
 	}

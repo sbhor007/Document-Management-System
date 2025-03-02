@@ -69,3 +69,10 @@ npm install @angular/animations
 ```npm
 
 ```
+
+3) **`for pdf viewer`**
+```npm
+<!-- npm install ngx-extended-pdf-viewer -->
+npm install ngx-doc-viewer --save 
+npm install mammoth --save
+```

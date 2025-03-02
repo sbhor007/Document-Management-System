@@ -7,6 +7,7 @@ import { DashBoardLayoutComponent } from './componets/dash-board-layout/dash-boa
 import { DocumentDetailsComponent } from './componets/documents/document-details/document-details.component';
 import { DocumentLayoutComponent } from './componets/documents/document-layout/document-layout.component';
 import { UploadDocumentsComponent } from './componets/documents/upload-documents/upload-documents.component';
+import { ViewDocumentComponent } from './componets/documents/view-document/view-document.component';
 
 // export const routes: Routes = [
 //     {
@@ -104,6 +105,10 @@ export const routes: Routes = [
       {
         path: 'upload/:folderId',
         component: UploadDocumentsComponent
+      },
+      {
+        path:'view-document',
+        component:ViewDocumentComponent
       }
     ]
   }

@@ -1,0 +1,39 @@
+<div class="w-full h-screen flex gap-1 scroll-smooth">
+  <div class="w-4/5">
+    <h2 class="text-2xl font-bold mb-4">Document Viewer Demo</h2>
+    <select
+      (change)="onDocChange($event)"
+      class="mb-4 p-2 border border-gray-300 rounded"
+    >
+      <option *ngFor="let doc of documents; let i = index" [value]="i">
+        {{ doc.type }}
+      </option>
+    </select>
+
+    <div *ngIf="selectedDoc.viewer === 'pdf' && safeUrl" class="w-full h-4/5">
+      <iframe [src]="safeUrl" class="w-full h-full scroll-smooth"></iframe>
+    </div>
+
+    <ngx-doc-viewer
+      *ngIf="selectedDoc.viewer === 'mammoth'"
+      [url]="selectedDoc.url"
+      viewer="mammoth"
+      class="w-full h-4/5 bg-gray-100"
+    ></ngx-doc-viewer>
+
+    <div
+      *ngIf="selectedDoc.viewer === 'custom'"
+      class="p-4 bg-yellow-100 border border-yellow-300 rounded"
+    >
+      <p>
+        Excel rendering not supported locally with ngx-doc-viewer. Consider
+        using SheetJS.
+      </p>
+    </div>
+  </div>
+  <div class="">
+    <!-- TODO:Future scope -->
+    AI Feature coming soon
+
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { routes } from './app.routes';
 import {
   provideClientHydration,
@@ -25,6 +25,7 @@ export const appConfig: ApplicationConfig = {
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
+    NgxDocViewerModule
     
   ],
 };

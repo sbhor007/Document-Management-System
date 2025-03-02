@@ -59,4 +59,11 @@ export class DocumentDetailsComponent implements OnInit {
   openUploadModal() {
     this.router.navigate(['/documents/upload/',this.receivedDocuments.folderId]);
   }
+
+
+  viewDocument(){
+    console.log("Clicked");
+    
+    alert("document opened")
+  }
 }

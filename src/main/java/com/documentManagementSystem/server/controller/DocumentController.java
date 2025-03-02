@@ -92,7 +92,7 @@ public class DocumentController {
 			Resource fileResource = documentService.getDocumentFile(documentId, authentication.getName());
 			Document document = documentService.getDocumentById(documentId, authentication.getName());
 			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + document.getDocumentName() + "\"")
+					.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + document.getDocumentName() + "\"")
 	                .contentType(MediaType.parseMediaType(document.getFileType()))
 	                .body(fileResource);
 		} catch (Exception e) {
@@ -102,9 +102,9 @@ public class DocumentController {
 	}
 	
 	// Endpoint to delete a document
-	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteDocument(@PathVariable Long id, Authentication authentication) {
-		documentService.deleteDocument(id, authentication.getName());
+	@DeleteMapping("/{documentId}")
+	public ResponseEntity<String> deleteDocument(@PathVariable Long documentId, Authentication authentication) {
+		documentService.deleteDocument(documentId, authentication.getName());
 		return ResponseEntity.ok("Document deleted successfully");
 	}
 }
