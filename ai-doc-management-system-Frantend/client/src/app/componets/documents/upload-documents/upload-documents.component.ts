@@ -65,7 +65,7 @@ export class UploadDocumentsComponent {
         next: (response) => {
           console.log('Upload success', response);
           this.uploadedFiles = [];
-            
+          this.router.navigate(['/documents', this.folderId]);
         },
         error: (err) => {
           console.error('Upload error', err);

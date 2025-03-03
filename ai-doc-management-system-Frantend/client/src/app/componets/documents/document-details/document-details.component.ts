@@ -61,9 +61,9 @@ export class DocumentDetailsComponent implements OnInit {
   }
 
 
-  viewDocument(){
-    console.log("Clicked");
+  // viewDocument(){
+  //   console.log("Clicked");
     
-    alert("document opened")
-  }
+  //   alert("document opened")
+  // }
 }

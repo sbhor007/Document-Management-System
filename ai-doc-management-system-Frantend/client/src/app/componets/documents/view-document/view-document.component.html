@@ -1,48 +1,42 @@
 <div class="w-full h-screen flex gap-1 scroll-smooth">
   <div class="w-4/5">
-    <h2 class="text-2xl font-bold mb-4">Document Viewer Demo</h2>
-    <select (change)="onDocChange($event)" class="mb-4 p-2 border border-gray-300 rounded">
-      <option *ngFor="let doc of documents; let i = index" [value]="i">
-        {{ doc.type }}
-      </option>
-    </select>
+    <h2 class="text-2xl font-bold mb-4">Document Viewer</h2>
 
+    <!-- Remove the select dropdown since we’re not using a document list -->
     <!-- PDF Viewer -->
-    <div *ngIf="selectedDoc.viewer === 'pdf' && safeUrl" class="w-full h-4/5">
+    <div *ngIf="selectedDoc?.viewer === 'pdf' && safeUrl" class="w-full h-4/5">
       <embed [src]="safeUrl" type="application/pdf" class="w-full h-full scroll-smooth">
     </div>
 
-    <!-- <button
-      *ngIf="selectedDoc.viewer === 'mammoth'"
-      (click)="downloadFile(selectedDoc.url)"
-      class="mt-4 p-2 bg-blue-500 text-white rounded"
-    >
-      Download Document
-    </button> -->
-
-    <!-- Word Viewer -->
+    <!-- TODO:Word Viewer -->
     <ngx-doc-viewer
-      *ngIf="selectedDoc.viewer === 'mammoth'"
-      [url]="selectedDoc.url"
+      *ngIf="selectedDoc?.viewer === 'mammoth'"
+      [url]="selectedDoc?.url || ''"
       viewer="mammoth"
       class="w-full h-4/5 bg-white border-gray-300 p-4 shadow-md"
     ></ngx-doc-viewer>
 
-    
-
     <!-- Excel Viewer -->
     <div
-      *ngIf="selectedDoc.viewer === 'custom' && excelData"
+      *ngIf="selectedDoc?.viewer === 'custom' && excelData"
       class="w-full h-4/5 overflow-auto bg-white border border-gray-300 p-4"
       [innerHTML]="excelData | sanitizeHtml"
     ></div>
 
     <!-- Fallback for Excel loading/error -->
     <div
-      *ngIf="selectedDoc.viewer === 'custom' && !excelData"
+      *ngIf="selectedDoc?.viewer === 'custom' && !excelData"
       class="p-4 bg-yellow-100 border border-yellow-300 rounded"
     >
       <p>Loading Excel file...</p>
+    </div>
+
+    <!-- Fallback for no document -->
+    <div
+      *ngIf="!selectedDoc"
+      class="p-4 bg-red-100 border border-red-300 rounded"
+    >
+      <p>No document selected or invalid document data.</p>
     </div>
   </div>
   <div>AI Feature coming soon</div>

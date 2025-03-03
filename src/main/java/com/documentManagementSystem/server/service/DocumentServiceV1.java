@@ -138,5 +138,11 @@ public class DocumentServiceV1 {
 		log.info("Found {} documents in folder {}", documents.size(), folderId);
 
 		return documents;
-}
+	}
+	
+	public String getPreSignedUrl(Long id, String username) {
+        Document document = getDocumentById(id, username);
+        return s3Service.preSignedUrl(document.getS3Url());
+    }
+
 }

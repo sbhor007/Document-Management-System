@@ -1,7 +1,7 @@
-<div class="absolute ml-40 z-20 group">
-  <!-- Positioned absolutely within relative parent -->
+<div class="w-52 h-[250px]">
+<div class="relative top-10 ml-40 z-20 group">
   <div
-    class="w-8 h-8 flex flex-col items-center justify-center hover:bg-slate-700 rounded-full"
+    class="w-8 h-8  flex flex-col items-center justify-center hover:bg-slate-700 rounded-full"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -18,24 +18,22 @@
     class="absolute right-0 -mt-10 -ml-5 hidden group-hover:block rounded-md p-2 w-32 shadow-lg z-20 bg-gray-100 bg-opacity-80 backdrop-blur-md"
   >
     <ul>
-      <li class="py-1 px-2 hover:bg-gray-100 cursor-pointer rounded">
-        Delete
-      </li>
+      <li class="py-1 px-2 hover:bg-gray-100 cursor-pointer rounded">Delete</li>
     </ul>
   </div>
 </div>
 
-<div (click)="openDocument() "
-  class="w-52 h-[250px] bg-yellow-400 rounded-md mb-6 shadow-xl hover:scale-105 transition-all cursor-pointer"
+<div
+  (click)="openDocument()"
+  class="w-full h-full bg-yellow-400 rounded-md mb-6 shadow-xl hover:scale-105 transition-all cursor-pointer"
 >
-  <div class="py-6 w-full h-4/6 rounded-t-md relative shadow-md">
-    <!-- Added relative positioning -->
-    <!-- Option icon with dropdown -->
-    
-  </div>
+  <div class="py-6 w-full h-4/6 rounded-t-md relative shadow-md"></div>
 
-  <div class="px-4 h-full py-2 " >
-    <h4 class="font-bold text-sm text-wrap overflow-hidden">{{ document?.documentName }}</h4>
-    <p>folderDescription</p>
+  <div class="px-4 h-full py-2">
+    <h4 class="font-bold text-sm text-wrap overflow-hidden">
+      {{ document?.documentName || "Unnamed Document" }}
+    </h4>
+    <p>{{ document?.folder?.folderName || "No Folder" }}</p>
   </div>
+</div>
 </div>

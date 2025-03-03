@@ -96,6 +96,20 @@ public class DocumentControllerV1 {
 		log.info("Folder ID : {}",folderId);
 		List<Document> documents = documentService.getDocumentsByFolder(folderId, authentication.getName());
 		 return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("success", "getting all documents inside that folder successfully",documents));
-//		return ResponseEntity.ok(documents);
 	}
+    
+    @GetMapping("/presigned/{documentId}")
+    public ResponseEntity<ApiResponse<?>> getPreSignedUrl(
+            @PathVariable Long documentId,
+            Authentication authentication) {
+        try {
+            log.info("Received request for pre-signed URL for document ID: {} by user: {}", documentId, authentication.getName());
+            String preSignedUrl = documentService.getPreSignedUrl(documentId, authentication.getName());
+            return ResponseEntity.ok(new ApiResponse("success", "Pre-signed URL generated successfully", preSignedUrl));
+        } catch (RuntimeException  e) {
+            log.warn("Failed to generate pre-signed URL for document ID {}: {}", documentId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse("error", "Document not found or unauthorized: " + e.getMessage()));
+        }
+    }
 }

@@ -4,6 +4,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import * as XLSX from 'xlsx';
 import { SanitizeHtmlPipe } from "../../../pipe/sanitize-html.pipe";
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-view-document',
@@ -12,37 +14,52 @@ import { SanitizeHtmlPipe } from "../../../pipe/sanitize-html.pipe";
   styleUrl: './view-document.component.css'
 })
 export class ViewDocumentComponent {
-  documents = [
-    { url: '/assets/documents/SantoshBhorResume.pdf', viewer: 'pdf', type: 'PDF' },
-    { url: '/assets/documents/sample.docx', viewer: 'mammoth', type: 'Word' },
-    { url: '/assets/documents/sample.xlsx', viewer: 'custom', type: 'Excel' }
-  ];
 
-  selectedDoc = this.documents[0];
+  selectedDoc: { url: string; viewer: string; type: string } | null = null;
   safeUrl: SafeResourceUrl | null = null;
-  excelData: string | null = null; // To store Excel HTML content
+  excelData: string | null = null;
 
-  constructor(private sanitizer: DomSanitizer) {
-    this.updateViewer(this.selectedDoc);
+  constructor(private sanitizer: DomSanitizer, private router: Router) {
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      const { url, type } = navigation.extras.state;
+      this.selectedDoc = {
+        url,
+        viewer: this.getViewerType(type),
+        type
+      };
+      this.updateViewer();
+    }
   }
 
-  onDocChange(event: Event): void {
-    const selectElement = event.target as HTMLSelectElement;
-    const index = Number(selectElement.value);
-    this.selectedDoc = this.documents[index];
-    this.updateViewer(this.selectedDoc);
+  ngOnInit(): void {
+    if (!this.selectedDoc) {
+      console.error('No document data provided');
+    }
   }
 
-  private updateViewer(doc: { url: string; viewer: string; type: string }): void {
+  private getViewerType(fileType: string): string {
+    switch (fileType) {
+      case 'application/pdf': return 'pdf';
+      case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+      case 'application/msword': return 'mammoth';
+      case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+      case 'application/vnd.ms-excel': return 'custom';
+      default: return 'pdf'; // Fallback
+    }
+  }
+
+  private updateViewer(): void {
+    if (!this.selectedDoc) return;
     this.safeUrl = null;
     this.excelData = null;
 
-    if (doc.viewer === 'pdf') {
-      this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(doc.url);
-    } else if (doc.viewer === 'custom') {
-      this.loadExcelFile(doc.url);
+    if (this.selectedDoc.viewer === 'pdf') {
+      this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.selectedDoc.url);
+    } else if (this.selectedDoc.viewer === 'custom') {
+      this.loadExcelFile(this.selectedDoc.url);
     }
-    // 'mammoth' viewer doesn't need additional handling here
+    // 'mammoth' viewer uses ngx-doc-viewer directly
   }
 
   private loadExcelFile(url: string): void {
@@ -52,7 +69,7 @@ export class ViewDocumentComponent {
         const workbook = XLSX.read(data, { type: 'array' });
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
-        this.excelData = XLSX.utils.sheet_to_html(worksheet); // Convert to HTML
+        this.excelData = XLSX.utils.sheet_to_html(worksheet);
       })
       .catch(error => {
         console.error('Error loading Excel file:', error);
@@ -60,11 +77,5 @@ export class ViewDocumentComponent {
       });
   }
 
-
-  downloadFile(url: string): void {
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = url.split('/').pop() || 'default-filename';
-    link.click();
-  }
+  
 }

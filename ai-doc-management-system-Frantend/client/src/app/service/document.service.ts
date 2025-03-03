@@ -20,4 +20,12 @@ export class DocumentService {
   getDocuments(folderId:number):Observable<File[]> {
   return this.http.get<File[]>(`${this.baseUrl}/folder/${folderId}`);
   }
+
+  getPreSignedUrl(documentId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/presigned/${documentId}`);
+  }
+
+  downloadDocument(documentId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/download/${documentId}`);
+  }
 }
