@@ -28,7 +28,11 @@ public class AuthService {
 	JWTService jwtService;
 	
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
-
+	
+	public boolean emailExists(String email) {
+	    return userRepository.findByUserName(email) != null; // Assuming you have a UserRepository
+	}
+	
 	public Users register(Users user) {
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));

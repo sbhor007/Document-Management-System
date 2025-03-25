@@ -23,6 +23,8 @@ export class AuthService {
     localStorage.setItem('expiryTime',(tokenDetails.data.expiryTime  + Date.now()))
   }
 
+
+
   isTokenExpire(): boolean {
     const expiryTime = localStorage.getItem('expiryTime');
     if (expiryTime) {
@@ -32,6 +34,11 @@ export class AuthService {
       }
     }
     return false;
+  }
+
+
+  checkEmailExists(email: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/email-exists/${email}`, this.httpOptions);
   }
 
   registerUser(user:any): Observable<any>{

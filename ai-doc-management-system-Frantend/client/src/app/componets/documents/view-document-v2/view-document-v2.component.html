@@ -1,0 +1,100 @@
+<div class="w-full h-screen flex flex-col bg-gray-100 p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold">Document Viewer</h2>
+    <button
+      class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+      (click)="goBack()"
+    >
+      Back to Documents
+    </button>
+  </div>
+
+  <div class="flex flex-grow overflow-hidden rounded-lg shadow-lg">
+    <!-- Main Document Viewer Panel -->
+    <div class="flex-1 bg-white">
+      <!-- Loading indicator -->
+      <div *ngIf="isLoading" class="w-full h-full flex items-center justify-center">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+      </div>
+
+      <!-- Google Docs Viewer for all supported documents -->
+      <div *ngIf="selectedDoc?.viewer === 'google' && googleViewerUrl" class="w-full h-full relative">
+        <iframe
+          [src]="googleViewerUrl"
+          frameborder="0"
+          class="w-full h-full border-0"
+          (error)="onIframeError($event)"
+        ></iframe>
+        <!-- Display error message if the viewer fails -->
+        <div
+          *ngIf="viewerError"
+          class="absolute top-0 left-0 w-full h-full bg-red-100 bg-opacity-90 flex items-center justify-center p-4 border border-red-300 rounded"
+        >
+          <div>
+            <p class="text-red-700 font-medium">{{ viewerError }}</p>
+            <a
+              [href]="selectedDoc?.url"
+              class="text-blue-500 underline mt-2 block"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Download Document
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fallback for unsupported document types -->
+      <div
+        *ngIf="selectedDoc?.viewer === 'unsupported' && !isLoading"
+        class="p-4 bg-red-100 border border-red-300 rounded m-4"
+      >
+        <p class="text-red-700 font-medium">{{ viewerError }}</p>
+        <a
+          [href]="selectedDoc?.url"
+          class="text-blue-500 underline mt-2 block"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Download Document
+        </a>
+      </div>
+
+      <!-- Fallback for no document -->
+      <div
+        *ngIf="!selectedDoc"
+        class="p-4 bg-red-100 border border-red-300 rounded m-4"
+      >
+        <p class="text-red-700 font-medium">No document selected or invalid document data.</p>
+      </div>
+    </div>
+
+    <!-- Right Sidebar - Document Info Panel (Optional) -->
+    <div *ngIf="documentInfo" class="w-64 bg-gray-50 border-l p-4 hidden md:block">
+      <h3 class="font-bold text-lg mb-3">Document Info</h3>
+      <div class="space-y-2">
+        <p><span class="font-medium">Name:</span> {{ documentInfo.name }}</p>
+        <p><span class="font-medium">Type:</span> {{ documentInfo.type }}</p>
+        <p><span class="font-medium">Size:</span> {{ documentInfo.size }}</p>
+        <p><span class="font-medium">Uploaded:</span> {{ documentInfo.uploadDate }}</p>
+      </div>
+
+      <div class="mt-6">
+        <h4 class="font-bold mb-2">Actions</h4>
+        <div class="space-y-2">
+          <a
+            [href]="selectedDoc?.url"
+            class="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 block text-center"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Download
+          </a>
+          <button class="w-full py-2 px-4 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+            Share
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

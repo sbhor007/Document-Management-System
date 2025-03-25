@@ -23,8 +23,17 @@ public class Document {
     @Column(nullable = false)
     private String fileType;
 
-    @Column(nullable = false)
+////    @Column(nullable = false)
     private String s3Url; // Amazon S3 URL for document storage.
+////    TODO: remove it
+//    
+    @Lob // Large Object for binary data
+//    @Column(nullable = false)
+    private byte[] fileContent; // Store the actual file bytes
+    
+    @Column(nullable = false)
+    private Long size;
+    
 
     @Column(nullable = false)
     private LocalDateTime uploadedAt = LocalDateTime.now();

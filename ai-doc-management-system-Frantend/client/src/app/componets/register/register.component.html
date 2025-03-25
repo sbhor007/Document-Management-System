@@ -1,54 +1,90 @@
-<div class="flex items-center justify-center ">
-   <div class="hidden"> <app-otp></app-otp></div>
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 class="text-2xl font-bold mb-6 text-center">Register</h2>
-        <form>
-            <div class="mb-4">
-                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">
-                    Name
-                </label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="name"
-                    type="text"
-                    placeholder="Name"
-                />
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
-                    Username 
-                </label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="username"
-                    type="email"
-                    placeholder="Email"
-                />
-            </div>
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
-                    Password
-                </label>
-                <input
-                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                    id="password"
-                    type="password"
-                    placeholder="Password"
-                />
-            </div>
-            <div class="flex items-center justify-between">
-                <button
-                    class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    type="button"
-                >
-                    Register
-                </button>
-            </div>
-            <div class="mt-2 text-center">
-                <span routerLink="/home/login" class="text-blue-500 hover:underline cursor-pointer"
-                  >Already have an account? Sign in
-                </span>
-              </div>
-        </form>
+<div class="flex items-center justify-center min-h-screen">
+  <!-- OTP Modal -->
+  <div *ngIf="showOtpModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+    <div class="bg-white p-4 rounded-lg shadow-md">
+      <app-otp 
+        [email]="registeredEmail" 
+        (otpVerified)="onOtpVerified()" 
+        (close)="showOtpModal = false"
+      ></app-otp>
     </div>
+  </div>
+
+  <!-- Registration Form -->
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md" 
+       [ngClass]="{ 'opacity-50 pointer-events-none': showOtpModal }">
+    <h2 class="text-2xl font-bold mb-6 text-center">Register</h2>
+
+    <!-- Error Message Display -->
+    <div
+      *ngIf="errorMessage"
+      class="mb-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded"
+    >
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="mb-4">
+        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
+        <input
+          formControlName="name"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          [ngClass]="{ 'border-red-500': submitted && f['name'].errors }"
+          id="name"
+          type="text"
+          placeholder="Name"
+        />
+        <div *ngIf="submitted && f['name'].errors" class="text-red-500 text-xs mt-1">
+          <div *ngIf="f['name'].errors['required']">Name is required</div>
+          <div *ngIf="f['name'].errors['minlength']">Name must be at least 2 characters</div>
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="userName">Username</label>
+        <input
+          formControlName="userName"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          [ngClass]="{ 'border-red-500': submitted && f['userName'].errors }"
+          id="userName"
+          type="email"
+          placeholder="Email"
+        />
+        <div *ngIf="submitted && f['userName'].errors" class="text-red-500 text-xs mt-1">
+          <div *ngIf="f['userName'].errors['required']">Email is required</div>
+          <div *ngIf="f['userName'].errors['email']">Please enter a valid email</div>
+        </div>
+      </div>
+      <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
+        <input
+          formControlName="password"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+          [ngClass]="{ 'border-red-500': submitted && f['password'].errors }"
+          id="password"
+          type="password"
+          placeholder="Password"
+        />
+        <div *ngIf="submitted && f['password'].errors" class="text-red-500 text-xs mt-1">
+          <div *ngIf="f['password'].errors['required']">Password is required</div>
+          <div *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</div>
+        </div>
+      </div>
+      <div class="flex items-center justify-between">
+        <button
+          [disabled]="loading"
+          class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          [ngClass]="{ 'opacity-50 cursor-not-allowed': loading }"
+          type="submit"
+        >
+          <span *ngIf="loading" class="animate-spin inline-block mr-2">⌛</span>
+          {{ loading ? "Registering..." : "Register" }}
+        </button>
+      </div>
+      <div class="mt-2 text-center">
+        <span routerLink="/home/login" class="text-blue-500 hover:underline cursor-pointer">
+          Already have an account? Sign in
+        </span>
+      </div>
+    </form>
+  </div>
 </div>

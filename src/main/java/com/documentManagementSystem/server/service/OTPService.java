@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.documentManagementSystem.server.enums.OTPValidationResponse;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class OTPService {
 	
 	@Autowired
@@ -96,9 +99,10 @@ public class OTPService {
                 timestampCache.remove(email);
                 return OTPValidationResponse.EXPIRED_OTP; // OTP expired
             }
-
+            log.info("otpcaches {} otp {}",cachedOtp,otp);
             // Validate the OTP using BCrypt
             boolean isMatch = encoder.matches(otp, cachedOtp);
+            log.info("is matched : {}",isMatch);
             return isMatch ? OTPValidationResponse.VALID_OTP : OTPValidationResponse.INVALID_OTP;
         } catch (Exception e) {
             // Handle exception during OTP validation

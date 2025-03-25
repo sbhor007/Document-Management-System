@@ -1,43 +1,98 @@
-<div class="w-full h-screen flex gap-1 scroll-smooth">
-  <div class="w-4/5">
-    <h2 class="text-2xl font-bold mb-4">Document Viewer</h2>
+<div class="w-full min-h-screen bg-gray-50 flex flex-col">
+  <!-- Header -->
+  <div class="flex justify-between items-center p-4 bg-white shadow-sm">
+    <h2 class="text-2xl font-bold">Document Viewer</h2>
+    <button 
+      class="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+      (click)="goBack()"
+    >
+      Back to Documents
+    </button>
+  </div>
 
-    <!-- Remove the select dropdown since we’re not using a document list -->
-    <!-- PDF Viewer -->
-    <div *ngIf="selectedDoc?.viewer === 'pdf' && safeUrl" class="w-full h-4/5">
-      <embed [src]="safeUrl" type="application/pdf" class="w-full h-full scroll-smooth">
+  <!-- Main Content -->
+  <div class="flex flex-1">
+    <!-- Document Viewer -->
+    <div class="w-3/4 p-4">
+      <!-- PDF Viewer -->
+      <!-- <ngx-extended-pdf-viewer
+        *ngIf="selectedDoc?.viewer === 'pdf' && selectedDoc?.url"
+        [src]="selectedDoc?.url || ''"
+        [height]="'80vh'"
+        [showHandToolButton]="true"
+        [showDownloadButton]="false"
+        [showPrintButton]="false"
+        (pdfLoadingFailed)="onPdfLoadError($event)"
+        (pdfLoaded)="onPdfLoaded($event)"
+      ></ngx-extended-pdf-viewer> -->
+      <div *ngIf="selectedDoc?.viewer === 'pdf' && safeUrl" class="w-full h-[80vh]">
+        <iframe [src]="safeUrl" class="w-full h-full" frameborder="0"></iframe>
+      </div>
+
+      <!-- Fallback for PDF -->
+      <!-- <div *ngIf="selectedDoc?.viewer === 'pdf' && pdfLoadError && safeUrl" class="w-full h-[80vh]">
+        <object [data]="safeUrl" type="application/pdf" class="w-full h-full">
+          <p>Your browser does not support PDFs. Please download the PDF to view it.</p>
+        </object>
+      </div> -->
+      <div *ngIf="selectedDoc?.viewer === 'pdf' && !safeUrl" class="p-4 bg-red-100 border border-red-300 rounded">
+        <p>Unable to load PDF. Please download it to view.</p>
+      </div>
+
+      <!-- Word Viewer -->
+      <ngx-doc-viewer
+        *ngIf="selectedDoc?.viewer === 'mammoth' && selectedDoc?.url"
+        [url]="selectedDoc?.url || ''"
+        viewer="mammoth"
+        class="w-full h-[80vh] bg-white border-gray-300 p-4 shadow-md"
+      ></ngx-doc-viewer>
+
+      <!-- Excel Viewer -->
+      <div
+        *ngIf="selectedDoc?.viewer === 'custom' && excelData"
+        class="w-full h-[80vh] overflow-auto bg-white border border-gray-300 p-4"
+        [innerHTML]="excelData | sanitizeHtml"
+      ></div>
+
+      <!-- Image Viewer -->
+      <div *ngIf="selectedDoc?.viewer === 'image' && safeUrl" class="w-full h-[80vh]">
+        <img [src]="safeUrl" alt="Document Image" class="w-full h-full object-contain" (error)="onImageLoadError($event)">
+      </div>
+
+      <!-- Loading/Error States -->
+      <div
+        *ngIf="loading"
+        class="p-4 bg-yellow-100 border border-yellow-300 rounded"
+      >
+        <p>Loading document...</p>
+      </div>
+
+      <div
+        *ngIf="error"
+        class="p-4 bg-red-100 border border-red-300 rounded"
+      >
+        <p>{{error}}</p>
+      </div>
     </div>
 
-    <!-- TODO:Word Viewer -->
-    <ngx-doc-viewer
-      *ngIf="selectedDoc?.viewer === 'mammoth'"
-      [url]="selectedDoc?.url || ''"
-      viewer="mammoth"
-      class="w-full h-4/5 bg-white border-gray-300 p-4 shadow-md"
-    ></ngx-doc-viewer>
-
-    <!-- Excel Viewer -->
-    <div
-      *ngIf="selectedDoc?.viewer === 'custom' && excelData"
-      class="w-full h-4/5 overflow-auto bg-white border border-gray-300 p-4"
-      [innerHTML]="excelData | sanitizeHtml"
-    ></div>
-
-    <!-- Fallback for Excel loading/error -->
-    <div
-      *ngIf="selectedDoc?.viewer === 'custom' && !excelData"
-      class="p-4 bg-yellow-100 border border-yellow-300 rounded"
-    >
-      <p>Loading Excel file...</p>
-    </div>
-
-    <!-- Fallback for no document -->
-    <div
-      *ngIf="!selectedDoc"
-      class="p-4 bg-red-100 border border-red-300 rounded"
-    >
-      <p>No document selected or invalid document data.</p>
+    <!-- Document Info Sidebar -->
+    <div class="w-1/4 p-4 bg-white shadow-sm border-l">
+      <h3 class="text-lg font-semibold mb-4">Document Info</h3>
+      <div class="space-y-2">
+        <p><strong>Name:</strong> {{ selectedDoc?.document?.documentName || 'Unknown' }}</p>
+        <p><strong>Type:</strong> {{ getDocumentType(selectedDoc?.type || '') }}</p>
+        <p><strong>Size:</strong> {{ selectedDoc?.document?.size ? (selectedDoc?.document.size / 1024).toFixed(2) + ' KB' : 'Unknown' }}</p>
+        <p><strong>Uploaded:</strong> {{ selectedDoc?.document?.uploadedAt | date:'shortDate' }}</p>
+      </div>
+      <div class="mt-6">
+        <h4 class="text-md font-semibold mb-2">Actions</h4>
+        <button 
+          class="w-full py-2 mb-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+          (click)="downloadDocument()"
+        >
+          Download
+        </button>
+      </div>
     </div>
   </div>
-  <div>AI Feature coming soon</div>
 </div>

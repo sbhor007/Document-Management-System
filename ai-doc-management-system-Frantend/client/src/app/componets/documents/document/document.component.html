@@ -1,39 +1,55 @@
 <div class="w-52 h-[250px]">
-<div class="relative top-10 ml-40 z-20 group">
-  <div
-    class="w-8 h-8  flex flex-col items-center justify-center hover:bg-slate-700 rounded-full"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="18"
-      height="4"
-      fill="bg-slate-700"
+  <!-- Menu dropdown -->
+  <div class="relative top-0 float-right z-20 group">
+    <div
+      class="w-8 h-8 flex flex-col items-center justify-center hover:bg-slate-200 rounded-full"
     >
-      <circle cx="9" cy="2" r="2" />
-      <circle cx="2" cy="2" r="2" />
-      <circle cx="16" cy="2" r="2" />
-    </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="4"
+        fill="currentColor"
+        class="text-slate-600"
+      >
+        <circle cx="9" cy="2" r="2" />
+        <circle cx="2" cy="2" r="2" />
+        <circle cx="16" cy="2" r="2" />
+      </svg>
+    </div>
+    <div
+      class="absolute right-0 mt-1 hidden group-hover:block rounded-md p-2 w-36 shadow-lg z-20 bg-white"
+    >
+      <ul>
+        <li class="py-1.5 px-3 hover:bg-gray-100 cursor-pointer rounded text-sm" (click)="viewDocument($event)">View</li>
+        <li class="py-1.5 px-3 hover:bg-gray-100 cursor-pointer rounded text-sm" (click)="downloadDocument($event)">Download</li>
+        <li class="py-1.5 px-3 hover:bg-gray-100 cursor-pointer rounded text-sm" (click)="renameDocument($event)">Rename</li>
+        <li class="py-1.5 px-3 hover:bg-gray-100 cursor-pointer rounded text-red-500 text-sm" (click)="deleteDocument($event)">Delete</li>
+      </ul>
+    </div>
   </div>
+
+  <!-- Document card -->
   <div
-    class="absolute right-0 -mt-10 -ml-5 hidden group-hover:block rounded-md p-2 w-32 shadow-lg z-20 bg-gray-100 bg-opacity-80 backdrop-blur-md"
+    (click)="openDocument()"
+    class="w-full h-full rounded-lg mb-6 shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border border-gray-200 bg-white"
   >
-    <ul>
-      <li class="py-1 px-2 hover:bg-gray-100 cursor-pointer rounded">Delete</li>
-    </ul>
-  </div>
-</div>
+    <!-- Document preview area -->
+    <div [ngClass]="getDocumentColorClass()" class="w-full h-3/5 relative">
+      <!-- Document type icon -->
+      <div class="absolute inset-0 flex items-center justify-center">
+        <img [src]="getDocumentIcon()" class="w-16 h-16 object-contain" alt="Document icon">
+      </div>
+    </div>
 
-<div
-  (click)="openDocument()"
-  class="w-full h-full bg-yellow-400 rounded-md mb-6 shadow-xl hover:scale-105 transition-all cursor-pointer"
->
-  <div class="py-6 w-full h-4/6 rounded-t-md relative shadow-md"></div>
-
-  <div class="px-4 h-full py-2">
-    <h4 class="font-bold text-sm text-wrap overflow-hidden">
-      {{ document?.documentName || "Unnamed Document" }}
-    </h4>
-    <p>{{ document?.folder?.folderName || "No Folder" }}</p>
+    <!-- Document info area -->
+    <div class="px-4 py-3">
+      <h4 class="font-semibold text-sm text-wrap overflow-hidden text-gray-800 mb-1">
+        {{ document?.documentName || "Unnamed Document" }}
+      </h4>
+      <div class="flex justify-between items-center text-xs text-gray-500">
+        <p>{{ document?.folder?.folderName || "No Folder" }}</p>
+        <p>{{ document?.uploadedAt | date:'shortDate' }}</p>
+      </div>
+    </div>
   </div>
-</div>
 </div>

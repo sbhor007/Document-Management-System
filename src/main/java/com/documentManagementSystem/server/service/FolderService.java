@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.documentManagementSystem.server.DTO.FolderRequest;
 import com.documentManagementSystem.server.DTO.FolderResponse;
+import com.documentManagementSystem.server.entity.Document;
 import com.documentManagementSystem.server.entity.Folder;
 import com.documentManagementSystem.server.entity.Users;
 import com.documentManagementSystem.server.repository.FolderRepository;
@@ -23,6 +24,9 @@ public class FolderService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	DocumentServiceV2 documentService;
 
 	public FolderResponse createFolder(FolderRequest request, String username) {
         log.debug("Creating folder for user: {}, request: {}", username, request);
@@ -92,17 +96,20 @@ public class FolderService {
                     log.error("Folder not found with ID: {} for user: {}", folderId, username);
                     return new RuntimeException("Folder not found: " + folderId);
                 });
+        
 
         validateFolderOwnership(folder, username);
 
         try {
-            folderRepository.delete(folder);
+//        	documentService.deleteSelectedDocumentsByFolder(folderId, username);
+//            folderRepository.delete(folder);
         } catch (Exception e) {
             log.error("Failed to delete folder ID: {} for user: {}, error: {}", folderId, username, e.getMessage());
             throw new RuntimeException("Failed to delete folder: " + e.getMessage());
         }
     }
-
+    
+    //delete folder with documents
     public FolderResponse getFolderDetails(Long folderId, String username) {
         if (folderId == null) {
             log.error("Folder ID is null for user: {}", username);
@@ -114,6 +121,7 @@ public class FolderService {
                     log.error("Folder not found with ID: {} for user: {}", folderId, username);
                     return new RuntimeException("Folder not found: " + folderId);
                 });
+        
 
         validateFolderOwnership(folder, username);
         return new FolderResponse(folder);

@@ -1,31 +1,53 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentService {
-  baseUrl = 'http://localhost:8080/api/documentsV1';
-  constructor(private http:HttpClient) { }
+  baseUrl = 'http://localhost:8080/api/documentsv2';
 
-  uploadDocuments(file: File[],folderId:number):Observable<any> {
+  constructor(private http: HttpClient) { }
+
+  uploadDocuments(files: File[], folderId: number): Observable<any> {
     const formData = new FormData();
-    file.forEach((file,index) => {
-      formData.append('files', file,file.name);
-    })
-    return this.http.post<File[]>(`${this.baseUrl}/upload/${folderId}`, formData);
+    files.forEach((file) => formData.append('files', file, file.name));
+    return this.http.post(`${this.baseUrl}/upload/${folderId}`, formData);
   }
 
-  getDocuments(folderId:number):Observable<File[]> {
-  return this.http.get<File[]>(`${this.baseUrl}/folder/${folderId}`);
+  getDocuments(folderId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/folder/${folderId}`);
+  }
+
+  // Updated to fetch document metadata by ID (if needed)
+  getDocument(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${id}`);
   }
 
   getPreSignedUrl(documentId: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/presigned/${documentId}`);
   }
 
-  downloadDocument(documentId: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/download/${documentId}`);
+  downloadDocument(documentId: number): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/download/${documentId}`, {
+      responseType: 'blob',
+      observe: 'response'
+    }).pipe(
+      map((response) => {
+        if (response.status !== 200) {
+          throw new Error(`Download failed with status ${response.status}`);
+        }
+        return response.body as Blob;
+      }),
+      catchError((error: any) => {
+        console.error('Download error:', error);
+        return throwError(() => new Error('Failed to download document'));
+      })
+    );
+  }
+
+  deleteDocument(documentId: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${documentId}`);
   }
 }

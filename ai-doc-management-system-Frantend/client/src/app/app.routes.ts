@@ -8,6 +8,7 @@ import { DocumentDetailsComponent } from './componets/documents/document-details
 import { DocumentLayoutComponent } from './componets/documents/document-layout/document-layout.component';
 import { UploadDocumentsComponent } from './componets/documents/upload-documents/upload-documents.component';
 import { ViewDocumentComponent } from './componets/documents/view-document/view-document.component';
+import { ViewDocumentV2Component } from './componets/documents/view-document-v2/view-document-v2.component';
 
 // export const routes: Routes = [
 //     {
@@ -109,6 +110,7 @@ export const routes: Routes = [
       {
         path:'view-document',
         component:ViewDocumentComponent
+        // component:ViewDocumentV2Component
       }
     ]
   }

@@ -36,7 +36,7 @@ public class SecurityConfig {
 		return http.csrf(Customizer -> Customizer.disable())
 
 				.authorizeHttpRequests(request -> request
-						.requestMatchers("/api/auth/register","/helth","/api/auth/logins","/sendOtp","/validateOtp/**")
+						.requestMatchers("/api/auth/**","/helth","/api/auth/logins","/api/email/**","/validateOtp/**")
 						.permitAll()
 						.anyRequest().authenticated()
 						)
@@ -55,6 +55,8 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+//        configuration.setAllowedHeaders();
+        
         configuration.setAllowedHeaders(Arrays.asList(
             "Origin",
             "Content-Type",

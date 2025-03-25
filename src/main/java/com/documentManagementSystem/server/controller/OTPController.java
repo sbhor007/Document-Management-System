@@ -13,9 +13,13 @@ import com.documentManagementSystem.server.enums.OTPValidationResponse;
 import com.documentManagementSystem.server.responce.ApiResponse;
 import com.documentManagementSystem.server.service.OTPService;
 
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
+
 
 @RestController
 @RequestMapping("/api/email")
+@Slf4j
 public class OTPController {
 	@Autowired
     private OTPService otpService;
@@ -33,12 +37,13 @@ public class OTPController {
 	                .body(new ApiResponse<>("error", "Failed to send OTP", null));
 	    }
 	}
-
+	
 
 
     // Endpoint to validate OTP
     @PostMapping("/validateOtp/{email}/{otp}")
     public ResponseEntity<ApiResponse<String>> validateOtp(@PathVariable String email, @PathVariable String otp) {
+    	log.info("user otp is : {} and email {}",otp,email);
         OTPValidationResponse response = otpService.validateOtp(email, otp);
         
         switch (response) {

@@ -30,6 +30,20 @@ public class AuthController {
 
 	 @Autowired
 	    private AuthService userService;
+	 
+//	 / New endpoint to check if email exists
+	    @GetMapping("/email-exists/{email}")
+	    public ResponseEntity<ApiResponse<Boolean>> checkEmailExists(@PathVariable String email) {
+	        log.info("Checking if email exists: {}", email);
+	        try {
+	            boolean exists = userService.emailExists(email);
+	            return ResponseEntity.ok(new ApiResponse<>("success", "Email check completed", exists));
+	        } catch (RuntimeException e) {
+	            log.error("Error checking email: {}, error: {}", email, e.getMessage());
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                    .body(new ApiResponse<>("error", e.getMessage(), null));
+	        }
+	    }
 
 	    @PostMapping("/register")
 	    public ResponseEntity<ApiResponse<Users>> register(@RequestBody Users user) {

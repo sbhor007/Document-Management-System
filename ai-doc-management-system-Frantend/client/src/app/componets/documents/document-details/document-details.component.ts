@@ -1,69 +1,68 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { DocumentComponent } from '../document/document.component';
 import { UploadDocumentsComponent } from '../upload-documents/upload-documents.component';
 import { DocumentService } from '../../../service/document.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-document-details',
-  imports: [RouterOutlet, DocumentComponent, UploadDocumentsComponent,CommonModule],
+  imports: [RouterOutlet, DocumentComponent, UploadDocumentsComponent,CommonModule,FormsModule],
   templateUrl: './document-details.component.html',
   styleUrl: './document-details.component.css',
 })
 export class DocumentDetailsComponent implements OnInit {
   receivedDocuments: any;
   documents: any;
+  searchTerm: string = '';
+  filteredDocuments: any[] = [];
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private documentService: DocumentService
   ) {
-    // Option 1: Get state during navigation (preferred for initial load)
     const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras.state) {
-      this.receivedDocuments = navigation.extras.state['documents'];
-    }
-
-    // Option 2: Fallback to history.state if navigation is null (e.g., page refresh)
-    if (!this.receivedDocuments && history.state.documents) {
-      this.receivedDocuments = history.state.documents;
-    }
-
+    this.receivedDocuments = navigation?.extras.state?.['documents'] || history.state.documents;
     console.log('Received Documents:', this.receivedDocuments);
   }
+
   ngOnInit() {
-    this.getDocuments(); 
-    
+    this.getDocuments();
   }
 
-
   getDocuments() {
-    console.log('Folder ID:', this.receivedDocuments.folderId);
-    
-    this.documentService.getDocuments(this.receivedDocuments.folderId).subscribe(
-      (data) => {
-        // console.log("document Data : ",data);
+    if (!this.receivedDocuments?.folderId) return;
+    this.documentService.getDocuments(this.receivedDocuments.folderId).subscribe({
+      next: (data: any) => {
         this.documents = data;
-        console.log("document Data : ", this.documents);
+        this.filteredDocuments = data.data || [];
+        console.log('Document Data:', this.documents);
       },
-      (error) => {
-        console.log(error);
+      error: (error) => {
+        console.error('Error fetching documents:', error);
       }
+    });
+  }
+
+  searchDocument() {
+    if (!this.searchTerm.trim()) {
+      this.filteredDocuments = this.documents.data || [];
+      return;
+    }
+    const searchTermLower = this.searchTerm.toLowerCase();
+    this.filteredDocuments = (this.documents.data || []).filter((doc: any) =>
+      doc.documentName.toLowerCase().includes(searchTermLower)
     );
   }
 
-
-  searchDocument() {}
   openUploadModal() {
-    this.router.navigate(['/documents/upload/',this.receivedDocuments.folderId]);
+    this.router.navigate(['/documents/upload', this.receivedDocuments.folderId]);
   }
 
-
-  // viewDocument(){
-  //   console.log("Clicked");
-    
-  //   alert("document opened")
-  // }
+  onDocumentDeleted() {
+    this.getDocuments();
+  }
 }
+

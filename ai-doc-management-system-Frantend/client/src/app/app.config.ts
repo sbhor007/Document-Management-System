@@ -10,6 +10,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './interceptor/auth.interceptor';
 import { provideToastr } from 'ngx-toastr';
 import {  provideAnimations } from '@angular/platform-browser/animations';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,7 +26,8 @@ export const appConfig: ApplicationConfig = {
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
-    NgxDocViewerModule
+    NgxDocViewerModule,
+    NgxExtendedPdfViewerModule
     
   ],
 };
