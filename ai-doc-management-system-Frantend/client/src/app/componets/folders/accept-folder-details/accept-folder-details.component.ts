@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { FolderService } from '../../../service/folder.service';
 import {
@@ -17,6 +17,9 @@ import {
   styleUrl: './accept-folder-details.component.css',
 })
 export class AcceptFolderDetailsComponent implements OnInit {
+  @Input() folderId: number = 0; // 0 means create, >0 means update
+  @Input() folder: any; // Optional: Pass full folder object for pre-filling
+  @Output() folderUpdated = new EventEmitter<void>();
   @Output() folderCreated = new EventEmitter<void>();
   @Output() closeModal = new EventEmitter<void>();
   createFolderForm: FormGroup;
@@ -28,60 +31,95 @@ export class AcceptFolderDetailsComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.createFolderForm = this.fb.group({
-      folderName: ['', [Validators.required]],
-      folderDescription: ['', [Validators.required]],
+      folderName: ['', [Validators.required, Validators.minLength(3)]],
+      folderDescription: ['', [Validators.required, Validators.minLength(5)]],
     });
   }
+
   ngOnInit(): void {
-    console.log('AcceptFolderDetailsComponent initialized');
+    console.log('AcceptFolderDetailsComponent initialized with folderId:', this.folderId);
+    if (this.folderId > 0 && this.folder) {
+      this.createFolderForm.patchValue({
+        folderName: this.folder.folderName,
+        folderDescription: this.folder.folderDescription,
+      });
+    }
   }
 
-  get folderName(){
+  get folderName() {
     return this.createFolderForm.get('folderName');
   }
-  get folderDescription(){
+
+  get folderDescription() {
     return this.createFolderForm.get('folderDescription');
   }
 
-  createFolder() {
-    console.log('createFolderForm', this.createFolderForm.value);
-    
-    if(this.createFolderForm.valid){
-      
-      this.folderService.createFolder(this.createFolderForm.value).subscribe((data)=>{
-        console.log(data);
-        this.folderCreated.emit();
-        // this.router.navigate(['/folders']);
-        alert('Folder created successfully');
-        this.close();
-      },
-      (error)=>{
-        console.log(error);
-        alert('Folder creation failed');
-        
-      }
-    )
+  // submitForm() {
+  //   if (this.createFolderForm.valid) {
+  //     const folderData = this.createFolderForm.value;
+  //     const serviceCall = this.folderId > 0
+  //       ? this.folderService.updateFolder(this.folderId, folderData)
+  //       : this.folderService.createFolder(folderData);
+
+  //     serviceCall.subscribe({
+  //       next: (data) => {
+  //         console.log(this.folderId > 0 ? 'Folder updated:' : 'Folder created:', data);
+  //         if (this.folderId > 0) {
+  //           this.folderUpdated.emit();
+  //           alert('Folder updated successfully');
+  //         } else {
+  //           this.folderCreated.emit();
+  //           alert('Folder created successfully');
+  //         }
+  //         this.close();
+  //       },
+  //       error: (error) => {
+  //         console.error(this.folderId > 0 ? 'Error updating folder:' : 'Error creating folder:', error);
+  //         alert(`Operation failed: ${error.error?.message || 'Unknown error'}`);
+  //       },
+  //     });
+  //   } else {
+  //     this.createFolderForm.markAllAsTouched();
+  //   }
+  // }
+
+  submitForm() {
+    if (this.createFolderForm.valid) {
+      const folderData = this.createFolderForm.value;
+      const serviceCall = this.folderId > 0
+        ? this.folderService.updateFolder(this.folderId, folderData)
+        : this.folderService.createFolder(folderData);
+  
+      serviceCall.subscribe({
+        next: (data) => {
+          console.log(this.folderId > 0 ? 'Folder updated:' : 'Folder created:', data);
+          if (this.folderId > 0) {
+            this.folderUpdated.emit();
+            alert('Folder updated successfully');
+          } else {
+            this.folderCreated.emit();
+            alert('Folder created successfully');
+          }
+          this.close();
+        },
+        error: (error) => {
+          console.error(this.folderId > 0 ? 'Error updating folder:' : 'Error creating folder:', error);
+          if (error.status === 404) {
+            alert('Folder not found. It may have been deleted.');
+          } else {
+            alert(`Operation failed: ${error.error?.message || 'Unknown error'}`);
+          }
+        },
+      });
+    } else {
+      this.createFolderForm.markAllAsTouched();
     }
-  }
-  updateFolderData(){
-    this.folderService.getAllFolders().subscribe(folders =>{
-      console.log(`updated folders : ${folders}`);
-      alert("Foldes Updated")
-    },
-    (error) =>{
-      console.log(`error while updating folders : ${error}`);
-    }
-  )
   }
 
   close() {
     this.isVisible = false;
-    this.folderCreated.emit();
-  }
-  acceptFolderDetails(folderDetails: any) {
-    this.folderService.createFolder(folderDetails).subscribe((data: any) => {
-      console.log(data);
-      this.router.navigate(['/folders']);
-    });
+    setTimeout(() => {
+      this.closeModal.emit();
+    }, 300); // Match the animation duration
   }
 }

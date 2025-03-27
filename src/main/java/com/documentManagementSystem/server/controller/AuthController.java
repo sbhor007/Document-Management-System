@@ -9,6 +9,7 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -118,6 +119,27 @@ public class AuthController {
 	        }
 	    }
 	    
+	    @GetMapping("/user")
+	    public ResponseEntity<ApiResponse<Users>> getUser(Authentication authentication) {
+	        log.info("Fetching user with token: {}", authentication);
+	        try {
+	            Users user = userService.getUser(authentication.getName());
+	            if (user == null) {
+	                log.warn("User not found with username: {}", authentication.getName());
+	                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                        .body(new ApiResponse<>("error", "User not found: " + authentication.getName(), null));
+	            }
+	            log.info("User details: {}", user);
+	            return ResponseEntity.status(HttpStatus.OK)
+	                    .body(new ApiResponse<>("success", "User fetched successfully", user));
+	        } catch (RuntimeException e) {
+	            log.error("Error fetching user with username: {}, error: {}", authentication.getName(), e.getMessage());
+	            HttpStatus status = e.getMessage().contains("not found") ? HttpStatus.NOT_FOUND : 
+	                               HttpStatus.INTERNAL_SERVER_ERROR;
+	            return ResponseEntity.status(status)
+	                    .body(new ApiResponse<>("error", e.getMessage(), null));
+	        }
+	    }
 	   /* public ResponseEntity<ApiResponce<Users>> updateUser(
 	            @PathVariable Long userId,
 	            @RequestBody Users updatedUser) {

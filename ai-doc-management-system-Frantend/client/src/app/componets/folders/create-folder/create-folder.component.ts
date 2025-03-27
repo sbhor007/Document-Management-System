@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AcceptFolderDetailsComponent } from "../accept-folder-details/accept-folder-details.component";
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -12,6 +12,8 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './create-folder.component.css'
 })
 export class CreateFolderComponent {
+  
+  // @Output() folderUpdated = new EventEmitter<void>();
   @Output() folderCreated = new EventEmitter<void>();
   isVisible:boolean=false
 
@@ -28,10 +30,16 @@ export class CreateFolderComponent {
     this.toster.success('Folder Created Successfully');
     this.isVisible = false;
   }
-
+  // updateFolder(){
+  //   this.isVisible = !this.isVisible
+  //   this.toster.success('Folder Created Successfully');
+  // }
+  // onFolderUpdated(){
+  //   this.folderUpdated.emit();
+  //   this.toster.success('Folder Created Successfully');
+  //   this.isVisible = false;
+  // }
   onCloseModal() {
     this.isVisible = false;
-  }
-
-  
+  }  
 }

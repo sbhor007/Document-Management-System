@@ -47,6 +47,10 @@ export class DocumentService {
     );
   }
 
+  getAllDocuments():Observable<any>{
+    return this.http.get(`${this.baseUrl}`)
+  }
+
   deleteDocument(documentId: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${documentId}`);
   }

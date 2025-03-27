@@ -11,6 +11,7 @@ import com.documentManagementSystem.server.DTO.FolderResponse;
 import com.documentManagementSystem.server.entity.Document;
 import com.documentManagementSystem.server.entity.Folder;
 import com.documentManagementSystem.server.entity.Users;
+import com.documentManagementSystem.server.repository.DocumentRepository;
 import com.documentManagementSystem.server.repository.FolderRepository;
 import com.documentManagementSystem.server.repository.UsersRepository;
 
@@ -27,6 +28,8 @@ public class FolderService {
 	
 	@Autowired
 	DocumentServiceV2 documentService;
+	
+	
 
 	public FolderResponse createFolder(FolderRequest request, String username) {
         log.debug("Creating folder for user: {}, request: {}", username, request);
@@ -79,7 +82,8 @@ public class FolderService {
             throw new RuntimeException("Failed to fetch folders: " + e.getMessage());
         }
     }
-
+    
+    
 
     public void deleteFolder(Long folderId, String username) {
         if (folderId == null) {
@@ -101,11 +105,65 @@ public class FolderService {
         validateFolderOwnership(folder, username);
 
         try {
-//        	documentService.deleteSelectedDocumentsByFolder(folderId, username);
-//            folderRepository.delete(folder);
+        	documentService.deleteAllDocumentsByFolder(folderId, username);
+        	
         } catch (Exception e) {
             log.error("Failed to delete folder ID: {} for user: {}, error: {}", folderId, username, e.getMessage());
             throw new RuntimeException("Failed to delete folder: " + e.getMessage());
+        }
+    }
+    
+    public FolderResponse updateFolder(Long folderId, FolderRequest request, String username) {
+        if (folderId == null ) {
+            log.error("Folder ID is null for user: {}", username);
+            throw new RuntimeException("Folder ID cannot be null");
+        }
+        if (request == null) {
+            log.error("Folder update failed: Request is null for user: {}", username);
+            throw new RuntimeException("Folder request cannot be null");
+        }
+        if (username == null) {
+            log.error("Username is null while updating folder ID: {}", folderId);
+            throw new RuntimeException("Username cannot be null");
+        }
+
+        log.debug("Updating folder ID: {} for user: {}, request: {}", folderId, username, request);
+
+        Folder folder = folderRepository.findById(folderId)
+                .orElseThrow(() -> {
+                    log.error("Folder not found with ID: {} for user: {}", folderId, username);
+                    return new RuntimeException("Folder not found: " + folderId);
+                });
+
+        validateFolderOwnership(folder, username);
+
+        // Update folder details
+        if (request.getFolderName() != null && !request.getFolderName().trim().isEmpty()) {
+            folder.setFolderName(request.getFolderName().trim());
+        }
+        if (request.getFolderDescription() != null) {
+            folder.setFolderDescription(request.getFolderDescription().trim());
+        }
+
+        // Handle parent folder update if provided
+        if (request.getParentFolderId() != null) {
+            Folder parentFolder = folderRepository.findById(request.getParentFolderId())
+                    .orElseThrow(() -> {
+                        log.error("Parent folder not found with ID: {} for user: {}", request.getParentFolderId(), username);
+                        return new RuntimeException("Parent folder not found: " + request.getParentFolderId());
+                    });
+            folder.setParentFolder(parentFolder);
+        } else if (request.getParentFolderId() == null && folder.getParentFolder() != null) {
+            folder.setParentFolder(null); // Allow removing parent folder
+        }
+
+        try {
+            Folder updatedFolder = folderRepository.save(folder);
+            log.info("Successfully updated folder ID: {} for user: {}", folderId, username);
+            return new FolderResponse(updatedFolder);
+        } catch (Exception e) {
+            log.error("Failed to update folder ID: {} for user: {}, error: {}", folderId, username, e.getMessage());
+            throw new RuntimeException("Failed to update folder: " + e.getMessage());
         }
     }
     

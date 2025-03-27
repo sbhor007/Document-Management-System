@@ -5,6 +5,7 @@ import { UploadDocumentsComponent } from '../upload-documents/upload-documents.c
 import { DocumentService } from '../../../service/document.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { UsersService } from '../../../service/users.service';
 
 @Component({
   selector: 'app-document-details',
@@ -17,18 +18,24 @@ export class DocumentDetailsComponent implements OnInit {
   documents: any;
   searchTerm: string = '';
   filteredDocuments: any[] = [];
+  user:any
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private documentService: DocumentService
+    private documentService: DocumentService,
+    private userService: UsersService
   ) {
+    this.user = this.userService.userData;
+    console.log("user data : "+this.user);
     const navigation = this.router.getCurrentNavigation();
     this.receivedDocuments = navigation?.extras.state?.['documents'] || history.state.documents;
     console.log('Received Documents:', this.receivedDocuments);
   }
 
   ngOnInit() {
+    this.user = this.userService.userData;
+    console.log("user data : "+this.user);
     this.getDocuments();
   }
 

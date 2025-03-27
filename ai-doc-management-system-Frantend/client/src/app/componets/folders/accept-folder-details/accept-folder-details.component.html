@@ -1,45 +1,71 @@
-
 <div
-*ngIf="isVisible"
-class="fixed inset-0 z-10 w-full h-screen flex items-center justify-center bg-gray-800 bg-opacity-20 transition-opacity transition-all duration-300 ease-in-out"
-[ngClass]="{ 'opacity-0': !isVisible, 'opacity-100': isVisible }"
+  *ngIf="isVisible"
+  class="fixed inset-0 z-50 w-full h-screen flex items-center justify-center bg-gray-800 bg-opacity-40 backdrop-blur-sm transition-opacity duration-300 ease-in-out"
+  [ngClass]="{ 'opacity-0': !isVisible, 'opacity-100': isVisible }"
 >
-  <div class="bg-white p-6 rounded-lg shadow-lg w-4/12">
-    <div class="flex justify-between items-center border-b pb-4">
-      <h1 class="text-2xl ">CREATE NEW FOLDER</h1>
-      <div class="w-5 h-5 rotate-45 cursor-pointer" (click)="close()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" style="enable-background:new 0 0 128 128" xml:space="preserve"><path style="fill:#303030" d="M128 63.954c0 2.006-.797 3.821-2.136 5.127-1.308 1.337-3.125 2.133-5.166 2.133H71.302v49.356c0 4.012-3.284 7.292-7.302 7.292-2.009 0-3.827-.828-5.166-2.134-1.308-1.337-2.136-3.152-2.136-5.159V71.214H7.302c-4.05 0-7.302-3.248-7.302-7.26 0-2.006.797-3.853 2.136-5.159a7.279 7.279 0 0 1 5.166-2.134h49.395V7.306c0-4.012 3.284-7.26 7.302-7.26 2.009 0 3.827.828 5.166 2.133a7.238 7.238 0 0 1 2.136 5.127v49.356h49.395A7.276 7.276 0 0 1 128 63.954z"/></svg>
+  <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-300">
+    <!-- Header -->
+    <div class="flex justify-between items-center border-b border-gray-200 pb-4">
+      <h1 class="text-2xl font-bold text-gray-800">
+        {{ folderId > 0 ? 'Update Folder' : 'Create New Folder' }}
+      </h1>
+      <div class="w-6 h-6 cursor-pointer text-gray-600 hover:text-gray-800 transition-colors duration-200" (click)="close()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
     </div>
-    <div class="mt-4">
-      <form [formGroup]="createFolderForm" (ngSubmit)="createFolder()">
-        <div class="my-5">
-          <label for="name" class="font-semibold">NAME</label>
+
+    <!-- Form -->
+    <div class="mt-6">
+      <form [formGroup]="createFolderForm" (ngSubmit)="submitForm()">
+        <!-- Folder Name -->
+        <div class="my-6">
+          <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Folder Name</label>
           <input
-              type="text"
-              id="name"
-              class=" pl-3 pr-12 py-2 w-full border rounded-lg focus:outline-none"
-              placeholder="Enter Folder name..."
-              formControlName="folderName"
-            />
+            type="text"
+            id="name"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
+            placeholder="Enter folder name..."
+            formControlName="folderName"
+            [ngClass]="{
+              'border-red-500 focus:ring-red-400': folderName?.invalid && (folderName?.dirty || folderName?.touched)
+            }"
+          />
+          <p *ngIf="folderName?.invalid && (folderName?.dirty || folderName?.touched)" class="text-red-500 text-xs mt-1">
+            Folder name must be at least 3 characters.
+          </p>
         </div>
-        <div class="my-5">
-          <label for="description" class="font-semibold">DESCRIPTION</label>
+
+        <!-- Folder Description -->
+        <div class="my-6">
+          <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
           <input
-              type="text"
-              id="description"
-              class=" pl-3 pr-12 py-2 w-full border rounded-lg focus:outline-none"
-              placeholder="Enter Folder description..."
-              formControlName="folderDescription"
-            />
+            type="text"
+            id="description"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
+            placeholder="Enter folder description..."
+            formControlName="folderDescription"
+            [ngClass]="{
+              'border-red-500 focus:ring-red-400': folderDescription?.invalid && (folderDescription?.dirty || folderDescription?.touched)
+            }"
+          />
+          <p *ngIf="folderDescription?.invalid && (folderDescription?.dirty || folderDescription?.touched)" class="text-red-500 text-xs mt-1">
+            Description must be at least 5 characters.
+          </p>
         </div>
+
+        <!-- Submit Button -->
         <div>
           <button
-            class="bg-slate-800 w-full text-white px-4 py-2 rounded-md"
+            type="submit"
+            class="w-full bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-600 focus:ring-offset-2 transition-all duration-200"
+            [disabled]="createFolderForm.invalid"
           >
-            create
+            {{ folderId > 0 ? 'Update Folder' : 'Create Folder' }}
           </button>
         </div>
       </form>
+    </div>
   </div>
 </div>

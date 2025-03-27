@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -86,6 +87,23 @@ public class FolderController {
             log.error("Error fetching folders for user: {}, error: {}", username, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse<>("error", e.getMessage(), null));
+        }
+    }
+    
+ // Update folder details
+    @PutMapping("/{folderId}")
+    public ResponseEntity<FolderResponse> updateFolder(
+            @PathVariable Long folderId,
+            @RequestBody FolderRequest request,
+            Authentication authentication) {
+        log.info("Received request to update folderId: {} for user: {}", folderId, authentication.getName());
+        try {
+            FolderResponse response = folderService.updateFolder(folderId, request, authentication.getName());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error updating folderId: {} for user: {}, error: {}", 
+                    folderId, authentication.getName(), e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 

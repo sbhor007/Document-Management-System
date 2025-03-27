@@ -1,32 +1,57 @@
-<div class="w-52 h-[270px] rounded-md mb-6 shadow-xl  hover:scale-105 transition-all cursor-pointer" >
-  <div class="py-6 w-full bg-slate-800 rounded-t-md relative"> <!-- Added relative positioning -->
-    <!-- Option icon with dropdown -->
-    <div class="absolute right-2 top-2 group"> <!-- Positioned absolutely within relative parent -->
-      <div class="w-8 h-8 flex items-center justify-center hover:bg-slate-700 rounded-full">
+  <!-- Options Menu Dropdown -->
+  <div class="relative  float-right z-20 group my-5">
+    <div
+      class="w-8 h-8 flex flex-col items-center justify-center hover:bg-slate-200 rounded-full"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="18"
         height="4"
-        fill="white"
+        fill="currentColor"
+        class="text-slate-600"
       >
         <circle cx="9" cy="2" r="2" />
         <circle cx="2" cy="2" r="2" />
         <circle cx="16" cy="2" r="2" />
       </svg>
-      </div>
-      <!-- Options menu -->
-      <div class="absolute right-0 -top-2 mt-2 hidden group-hover:block rounded-md p-2 w-32 shadow-lg z-20 bg-gray-100 bg-opacity-80 backdrop-blur-md">
-      <ul>
-        <li class="py-1 px-2 hover:bg-gray-100 cursor-pointer rounded">Open</li>
-        <li class="py-1 px-2 hover:bg-gray-100 cursor-pointer rounded">Update</li>
-        <li class="py-1 px-2 hover:bg-gray-100 cursor-pointer rounded">Delete</li>
-      </ul>
-      </div>
     </div>
 
-<!-- book icon -->
- 
-    <div class="w-16 h-3 relative left-2">
+    <!-- Dropdown Menu -->
+    <div
+      class="absolute right-0 mt-1 hidden group-hover:block rounded-md p-2 w-36 shadow-lg z-20 bg-white"
+    >
+      <ul>
+        <li
+          class="py-1.5 px-3 hover:bg-gray-100 cursor-pointer rounded text-sm"
+          (click)="viewFolder($event)"
+        >
+          View
+        </li>
+        <li
+          class="py-1.5 px-3 hover:bg-gray-100 cursor-pointer rounded text-sm"
+          (click)="updateFolder($event)"
+        >
+          Rename
+        </li>
+        <li
+          class="py-1.5 px-3 hover:bg-gray-100 cursor-pointer rounded text-red-500 text-sm"
+          (click)="deleteFolder($event)"
+        >
+          Delete
+        </li>
+      </ul>
+    </div>
+  </div>
+
+<div
+  class="w-52 h-[250px] rounded-md mb-6 my-5 shadow-xl hover:scale-[1.02] transition-all cursor-pointer"
+  (click)="viewFolder($event)"
+>
+
+
+  <!-- Header Section with Book Icon -->
+  <div class="py-5 w-full bg-slate-800 rounded-t-md relative">
+    <div class="w-14 h-3 relative left-2">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
         <defs>
           <style>
@@ -66,9 +91,18 @@
     </div>
   </div>
 
-  <div class="p-4 h-full" (click)="openFolder(folder)">
+  <!-- Content Section -->
+  <div class="p-4 h-full" (click)="viewFolder($event)">
     <div class="text-right text-gray-500 text-lg">date</div>
     <h4 class="font-bold text-2xl text-wrap">{{ folder?.folderName }}</h4>
     <p>{{ folder?.folderDescription }}</p>
   </div>
+</div>
+<div *ngIf="isVisible" class="transition-all">
+  <app-accept-folder-details
+    [folderId]="folder.folderId"
+    [folder]="folder"
+    (folderUpdated)="onFolderUpdated()"
+    (closeModal)="onCloseModal()"
+  ></app-accept-folder-details>
 </div>

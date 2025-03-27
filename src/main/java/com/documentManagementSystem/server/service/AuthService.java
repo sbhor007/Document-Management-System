@@ -60,6 +60,10 @@ public class AuthService {
     public Users getUserById(Long userId){
     	return userRepository.findById(userId).orElse(null);
     }
+    
+    public Users getUser(String usernamr) {
+    	return userRepository.findByUserName(usernamr);
+    }
 
 	
 

@@ -35,6 +35,11 @@ export class UserDashboardComponent {
   onFolderCreated(){
     this.getAllFolders();
   }
+
+  onFolderDeleted(){
+    this.getAllFolders()
+  }
+
   logout() {
     this.authService.logOut();
     this.router.navigate(['/home']);
