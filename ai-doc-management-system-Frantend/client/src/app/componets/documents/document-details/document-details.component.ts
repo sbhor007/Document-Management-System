@@ -26,8 +26,8 @@ export class DocumentDetailsComponent implements OnInit {
     private documentService: DocumentService,
     private userService: UsersService
   ) {
-    this.user = this.userService.userData;
-    console.log("user data : "+this.user);
+    // this.user = this.userService.userData;
+    // console.log("user data : "+this.user);
     const navigation = this.router.getCurrentNavigation();
     this.receivedDocuments = navigation?.extras.state?.['documents'] || history.state.documents;
     console.log('Received Documents:', this.receivedDocuments);
@@ -45,6 +45,10 @@ export class DocumentDetailsComponent implements OnInit {
       next: (data: any) => {
         this.documents = data;
         this.filteredDocuments = data.data || [];
+        this.user = this.documents.data[0].user.name
+        console.log('xxxx : ',this.user);
+        // console.log("filter : " + this.filterDocuments);
+        
         console.log('Document Data:', this.documents);
       },
       error: (error) => {
@@ -52,14 +56,13 @@ export class DocumentDetailsComponent implements OnInit {
       }
     });
   }
-
-  searchDocument() {
+  filterDocuments() {
     if (!this.searchTerm.trim()) {
-      this.filteredDocuments = this.documents.data || [];
+      this.filteredDocuments = this.documents?.data || [];
       return;
     }
     const searchTermLower = this.searchTerm.toLowerCase();
-    this.filteredDocuments = (this.documents.data || []).filter((doc: any) =>
+    this.filteredDocuments = (this.documents?.data || []).filter((doc: any) =>
       doc.documentName.toLowerCase().includes(searchTermLower)
     );
   }

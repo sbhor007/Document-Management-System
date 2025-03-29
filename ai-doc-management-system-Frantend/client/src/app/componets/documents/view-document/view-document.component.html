@@ -1,7 +1,7 @@
 <div class="w-full min-h-screen bg-gray-50 flex flex-col">
   <!-- Header -->
   <div class="flex justify-between items-center p-4 bg-white shadow-sm">
-    <h2 class="text-2xl font-bold">Document Viewer</h2>
+    <h2 class="text-2xl font-bold">{{selectedDoc?.document.documentName}}</h2>
     <button 
       class="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
       (click)="goBack()"

@@ -25,6 +25,8 @@ export class FolderService {
 
   // In FolderService (Angular)
   updateFolder(folderId: number, folderData: any) {
+    console.log("update folder called");
+    
     return this.http.put(`/api/folders/${folderId}`, folderData);
   }
 

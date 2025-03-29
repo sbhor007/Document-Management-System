@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Table(name = "folders")
@@ -40,10 +41,12 @@ public class Folder {
 
     @OneToMany(mappedBy = "parentFolder", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"parentFolder", "documents", "user"})
+    @ToString.Exclude
     private List<Folder> subfolders = new ArrayList<Folder>(); // List of subfolders.
 
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"folder", "user"})
+    @ToString.Exclude
     private List<Document> documents = new ArrayList<>(); // List of documents in this folder.
  
 }

@@ -3,12 +3,24 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DocumentService {
   baseUrl = 'http://localhost:8080/api/documentsv2';
+  openedDocument: any[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
+
+  addOpenedDocument(document: any) {
+    const exists = this.openedDocument.some((doc) => doc.id === document.id);
+    if (!exists) {
+      if (this.openedDocument.length > 3) {
+      this.openedDocument.pop(); // Remove the oldest document
+      }
+      this.openedDocument.unshift(document)
+      // this.openedDocument.push(document);
+    }
+  }
 
   uploadDocuments(files: File[], folderId: number): Observable<any> {
     const formData = new FormData();
@@ -30,25 +42,27 @@ export class DocumentService {
   }
 
   downloadDocument(documentId: number): Observable<Blob> {
-    return this.http.get(`${this.baseUrl}/download/${documentId}`, {
-      responseType: 'blob',
-      observe: 'response'
-    }).pipe(
-      map((response) => {
-        if (response.status !== 200) {
-          throw new Error(`Download failed with status ${response.status}`);
-        }
-        return response.body as Blob;
-      }),
-      catchError((error: any) => {
-        console.error('Download error:', error);
-        return throwError(() => new Error('Failed to download document'));
+    return this.http
+      .get(`${this.baseUrl}/download/${documentId}`, {
+        responseType: 'blob',
+        observe: 'response',
       })
-    );
+      .pipe(
+        map((response) => {
+          if (response.status !== 200) {
+            throw new Error(`Download failed with status ${response.status}`);
+          }
+          return response.body as Blob;
+        }),
+        catchError((error: any) => {
+          console.error('Download error:', error);
+          return throwError(() => new Error('Failed to download document'));
+        })
+      );
   }
 
-  getAllDocuments():Observable<any>{
-    return this.http.get(`${this.baseUrl}`)
+  getAllDocuments(): Observable<any> {
+    return this.http.get(`${this.baseUrl}`);
   }
 
   deleteDocument(documentId: number): Observable<any> {

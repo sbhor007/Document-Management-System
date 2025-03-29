@@ -85,6 +85,7 @@ export class DashBoardLayoutComponent {
   }
 
   viewDocument(doc: any): void {
+    this.documentService.addOpenedDocument(doc);
     this.router.navigate(['/documents/view-document'], { 
       state: { document: doc } 
     });

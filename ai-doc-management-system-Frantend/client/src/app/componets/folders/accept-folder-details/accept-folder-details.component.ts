@@ -24,6 +24,7 @@ export class AcceptFolderDetailsComponent implements OnInit {
   @Output() closeModal = new EventEmitter<void>();
   createFolderForm: FormGroup;
   isVisible: boolean = true;
+  parentFolderId: number | null = null;
 
   constructor(
     private router: Router,
@@ -33,6 +34,7 @@ export class AcceptFolderDetailsComponent implements OnInit {
     this.createFolderForm = this.fb.group({
       folderName: ['', [Validators.required, Validators.minLength(3)]],
       folderDescription: ['', [Validators.required, Validators.minLength(5)]],
+      parentFolderId : this.parentFolderId
     });
   }
 
@@ -84,12 +86,15 @@ export class AcceptFolderDetailsComponent implements OnInit {
   // }
 
   submitForm() {
+    console.log(`submit Form : accept`);
+    
     if (this.createFolderForm.valid) {
       const folderData = this.createFolderForm.value;
       const serviceCall = this.folderId > 0
         ? this.folderService.updateFolder(this.folderId, folderData)
         : this.folderService.createFolder(folderData);
-  
+        console.log(serviceCall);
+        
       serviceCall.subscribe({
         next: (data) => {
           console.log(this.folderId > 0 ? 'Folder updated:' : 'Folder created:', data);

@@ -18,6 +18,8 @@ export class DocumentComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("Document:", this.document);
+    
+    console.log('tttttt : ',this.documentService.openedDocument);
   }
 
   // Navigate to viewer instead of downloading
@@ -74,6 +76,13 @@ export class DocumentComponent implements OnInit {
 
   openDocument() {
     this.viewDocument(new Event('click')); // Trigger view on card click
+    this.documentService.addOpenedDocument(this.document)
+    
+  }
+
+  get openedDocuments(): any[] {
+    
+    return this.documentService.openedDocument;
   }
 
   getDocumentColorClass(): string {

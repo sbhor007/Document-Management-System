@@ -15,6 +15,7 @@ export class CreateFolderComponent {
   
   // @Output() folderUpdated = new EventEmitter<void>();
   @Output() folderCreated = new EventEmitter<void>();
+  @Output() folderUpdated = new EventEmitter<void>();
   isVisible:boolean=false
 
   constructor(private router:Router, private folderService:FolderService,private toster:ToastrService) { }
@@ -30,10 +31,10 @@ export class CreateFolderComponent {
     this.toster.success('Folder Created Successfully');
     this.isVisible = false;
   }
-  // updateFolder(){
-  //   this.isVisible = !this.isVisible
-  //   this.toster.success('Folder Created Successfully');
-  // }
+  updateFolder(){
+    this.isVisible = !this.isVisible
+    this.toster.success('Folder Created Successfully');
+  }
   // onFolderUpdated(){
   //   this.folderUpdated.emit();
   //   this.toster.success('Folder Created Successfully');
