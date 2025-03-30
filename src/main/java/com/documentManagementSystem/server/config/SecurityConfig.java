@@ -144,7 +144,7 @@ public class SecurityConfig {
 		return http.csrf(Customizer -> Customizer.disable())
 
 				.authorizeHttpRequests(request -> request
-						.requestMatchers("/api/auth/**","/helth","/api/auth/logins","/api/email/**","/validateOtp/**")
+						.requestMatchers("/api/auth/**","/helth","/api/auth/logins","/api/email/**","/validateOtp/**","/forgot-password/**")
 						.permitAll()
 						.anyRequest().authenticated()
 						)
@@ -206,8 +206,8 @@ public class SecurityConfig {
 		return config.getAuthenticationManager();
 	}
 
-	private PasswordEncoder passwordEncoder() {
-		
+	@Bean
+	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder(12);
 	}
 	

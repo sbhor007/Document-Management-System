@@ -28,7 +28,7 @@ public class AuthService {
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 	
 	public boolean emailExists(String email) {
-	    return userRepository.findByUserName(email) != null; // Assuming you have a UserRepository
+	    return userRepository.findByUserName(email) != null; 
 	}
 	
 	public Users register(Users user) {

@@ -1,9 +1,9 @@
 package com.documentManagementSystem.server.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.documentManagementSystem.server.entity.Users;
@@ -17,7 +17,9 @@ public class UserService {
 	
 	@Autowired
 	private UsersRepository userRepository;
-
+	
+	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+	
 	public List<Users> getAllUsers() {
         try {
             List<Users> users = userRepository.findAll();
@@ -70,42 +72,32 @@ public class UserService {
     }
 	
 	
-	public Users updateUser(Long userId, Users updatedUser) {
-        if (userId == null) {
-            log.error("User ID is null for update");
-            throw new RuntimeException("User ID cannot be null");
-        }
-        if (updatedUser == null) {
-            log.error("Updated user data is null for ID: {}", userId);
-            throw new RuntimeException("User data cannot be null");
-        }
+	public Users updateUser(Users updatedUser) {
 
         try {
-            Users existingUser = userRepository.findById(userId)
-                    .orElseThrow(() -> {
-                        log.error("User not found with ID: {} for update", userId);
-                        return new RuntimeException("User not found: " + userId);
-                    });
-
-            // Update fields (assuming Users has setters for these)
-            if (updatedUser.getUserName() != null) {
-                existingUser.setUserName(updatedUser.getUserName());
-            }
+        	Users existingUser = userRepository.findByUserName(updatedUser.getUserName());
+        	if(existingUser == null) {
+        		log.error("User not found with Username: {} for update", updatedUser.getUserName());
+        	    throw new RuntimeException("User not found: " + updatedUser.getUserName());
+        	}
+           
             if (updatedUser.getPassword() != null) {
-                existingUser.setPassword(updatedUser.getPassword());
+                existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
             }
             // Add other fields as needed (e.g., email, role)
 
             Users savedUser = userRepository.save(existingUser);
-            log.debug("Updated user with ID: {}", userId);
+            log.debug("Updated user with Usermane: {}", updatedUser.getUserName());
             return savedUser;
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
-            log.error("Failed to update user with ID: {}, error: {}", userId, e.getMessage());
+            log.error("Failed to update user with: {}, error: {}", updatedUser.getUserName(), e.getMessage());
             throw new RuntimeException("Failed to update user: " + e.getMessage());
         }
     }
+	
+//	public 
 	
 	
 }

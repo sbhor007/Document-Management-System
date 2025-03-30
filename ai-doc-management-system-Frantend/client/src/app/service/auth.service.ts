@@ -41,6 +41,8 @@ export class AuthService {
     return this.http.get(`${this.baseUrl}/email-exists/${email}`);
   }
 
+  
+
   registerUser(user:any): Observable<any>{
     console.log(user);
     return this.http.post(`${this.baseUrl}/register`,user)
@@ -51,6 +53,10 @@ export class AuthService {
       'Content-Type': 'application/json'
   });
     return this.http.post(`${this.baseUrl}/logins`,userCredential,{ headers: loginHeaders })
+  }
+
+  forgotPassword(newPasswordData:any):Observable<any>{
+    return this.http.put(`${this.baseUrl}/forgot-password/${newPasswordData.email}`,newPasswordData.newPassword)
   }
 
   isLoggedIn(): boolean {

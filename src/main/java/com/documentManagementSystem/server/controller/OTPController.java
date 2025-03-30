@@ -55,7 +55,7 @@ public class OTPController {
         } catch (RuntimeException e) {
             log.error("Error checking email: {}, error: {}", email, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse<>("error", e.getMessage(), null));
+                    .body(new ApiResponse<>("error", "Internal Server Error", null));
         }
     }
 

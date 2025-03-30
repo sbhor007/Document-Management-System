@@ -14,13 +14,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.documentManagementSystem.server.DTO.UpdatePassword;
 import com.documentManagementSystem.server.entity.Users;
 import com.documentManagementSystem.server.responce.ApiResponse;
 import com.documentManagementSystem.server.service.AuthService;
+import com.documentManagementSystem.server.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,15 +32,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AuthController {
 
-	 @Autowired
-	    private AuthService userService;
+	 	@Autowired
+	    private AuthService authService;
+	 	
+	 	@Autowired
+	 	private UserService userService;
 	 
-//	 / New endpoint to check if email exists
 	    @GetMapping("/email-exists/{email}")
 	    public ResponseEntity<ApiResponse<Boolean>> checkEmailExists(@PathVariable String email) {
 	        log.info("Checking if email exists: {}", email);
 	        try {
-	            boolean exists = userService.emailExists(email);
+	            boolean exists = authService.emailExists(email);
+	            System.out.println("is exist : " + exists);
+	            log.info("Checking if email exists: {}", exists);
+	            log.info("Email is exist : {}",exists);
 	            return ResponseEntity.ok(new ApiResponse<>("success", "Email check completed", exists));
 	        } catch (RuntimeException e) {
 	            log.error("Error checking email: {}, error: {}", email, e.getMessage());
@@ -50,7 +58,7 @@ public class AuthController {
 	    public ResponseEntity<ApiResponse<Users>> register(@RequestBody Users user) {
 	        log.info("User registration data: {}", user);
 	        try {
-	            Users savedUser = userService.register(user);
+	            Users savedUser = authService.register(user);
 	            return ResponseEntity.status(HttpStatus.CREATED)
 	                    .body(new ApiResponse<>("success", "User registered successfully", savedUser));
 	        } catch (RuntimeException e) {
@@ -64,7 +72,7 @@ public class AuthController {
 	    public ResponseEntity<ApiResponse<Map<String, Object>>> login(@RequestBody Users user) {
 	        log.info("Login credentials: {}", user);
 	        try {
-	            String jwtToken = userService.verify(user);
+	            String jwtToken = authService.verify(user);
 	            if (jwtToken != null) {
 	                Map<String, Object> tokenDetails = new HashMap<>();
 	                tokenDetails.put("token", jwtToken);
@@ -82,11 +90,29 @@ public class AuthController {
 	        }
 	    }
 	    
+	    @PutMapping("/forgot-password/{email}")
+	    public ResponseEntity<ApiResponse<?>> forgotPassword(@PathVariable String email, @RequestBody String newPassword){
+	    	log.info("New Password credentials: username {}, password {}", email, newPassword);
+	    	try {
+				Users user = new Users();
+				user.setUserName(email);
+				user.setPassword(newPassword);
+				
+				 Users savedUser = userService.updateUser(user);
+		            return ResponseEntity.status(HttpStatus.CREATED)
+		                    .body(new ApiResponse<>("success", "Password Forget Successfully", savedUser));
+		        } catch (RuntimeException e) {
+		            log.error("Error in Forgot Password  error: {}",  e.getMessage());
+		            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+		                    .body(new ApiResponse<>("error", e.getMessage(), null));
+		        }
+	    }
+	    
 	    @GetMapping("all-users")
 	    public ResponseEntity<ApiResponse<List<Users>>> getAllUsers() {
 	        log.info("Fetching all users");
 	        try {
-	            List<Users> users = userService.getAllUser();
+	            List<Users> users = authService.getAllUser();
 	            log.info("Fetched {} users", users.size());
 	            return ResponseEntity.status(HttpStatus.OK)
 	                    .body(new ApiResponse<>("success", "All users fetched successfully", users));
@@ -101,7 +127,7 @@ public class AuthController {
 	    public ResponseEntity<ApiResponse<Users>> getUserById(@PathVariable Long userId) {
 	        log.info("Fetching user with ID: {}", userId);
 	        try {
-	            Users user = userService.getUserById(userId);
+	            Users user = authService.getUserById(userId);
 	            if (user == null) {
 	                log.warn("User not found with ID: {}", userId);
 	                return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -123,7 +149,7 @@ public class AuthController {
 	    public ResponseEntity<ApiResponse<Users>> getUser(Authentication authentication) {
 	        log.info("Fetching user with token: {}", authentication);
 	        try {
-	            Users user = userService.getUser(authentication.getName());
+	            Users user = authService.getUser(authentication.getName());
 	            if (user == null) {
 	                log.warn("User not found with username: {}", authentication.getName());
 	                return ResponseEntity.status(HttpStatus.NOT_FOUND)

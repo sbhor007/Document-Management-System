@@ -48,7 +48,7 @@ export class OtpComponent implements OnChanges {
           this.isVerifying = false;
           this.otpVerified.emit();
           alert("OPT verified")
-          this.router.navigate(['/home/login'])
+          // this.router.navigate(['/home/login'])
 
         },
         error: (error) => {

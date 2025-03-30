@@ -9,6 +9,7 @@ import { DocumentLayoutComponent } from './componets/documents/document-layout/d
 import { UploadDocumentsComponent } from './componets/documents/upload-documents/upload-documents.component';
 import { ViewDocumentComponent } from './componets/documents/view-document/view-document.component';
 import { ViewDocumentV2Component } from './componets/documents/view-document-v2/view-document-v2.component';
+import { ForgotPasswordComponent } from './componets/forgot-password/forgot-password.component';
 
 // export const routes: Routes = [
 //     {
@@ -83,6 +84,10 @@ export const routes: Routes = [
       {
         path: 'register',
         component: RegisterComponent
+      },
+      {
+        path:'forgot-password',
+        component:ForgotPasswordComponent
       }
     ]
   },
