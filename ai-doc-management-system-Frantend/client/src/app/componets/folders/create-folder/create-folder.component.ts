@@ -35,11 +35,11 @@ export class CreateFolderComponent {
     this.isVisible = !this.isVisible
     this.toster.success('Folder Created Successfully');
   }
-  // onFolderUpdated(){
-  //   this.folderUpdated.emit();
-  //   this.toster.success('Folder Created Successfully');
-  //   this.isVisible = false;
-  // }
+  onFolderUpdate(){
+    this.folderUpdated.emit();
+    this.toster.success('Folder Created Successfully');
+    this.isVisible = false;
+  }
   onCloseModal() {
     this.isVisible = false;
   }  

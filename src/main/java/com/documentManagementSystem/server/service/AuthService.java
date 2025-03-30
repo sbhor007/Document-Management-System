@@ -16,8 +16,6 @@ import com.documentManagementSystem.server.repository.UsersRepository;
 @Service
 public class AuthService {
 	
-	
-	
 	@Autowired
 	UsersRepository userRepository;
 	

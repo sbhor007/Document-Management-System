@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Route, Router } from '@angular/router';
 import { EmailServiceService } from '../../service/email-service.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class OtpComponent implements OnChanges {
   isVerifying: boolean = false;
   isResending: boolean = false;
 
-  constructor(private emailService: EmailServiceService) {}
+  constructor(private emailService: EmailServiceService,private router:Router) {}
   ngOnChanges(changes: SimpleChanges): void {
     throw new Error('Method not implemented.');
   }
@@ -47,6 +47,9 @@ export class OtpComponent implements OnChanges {
         next: () => {
           this.isVerifying = false;
           this.otpVerified.emit();
+          alert("OPT verified")
+          this.router.navigate(['/home/login'])
+
         },
         error: (error) => {
           this.isVerifying = false;

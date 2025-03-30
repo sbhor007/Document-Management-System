@@ -29,7 +29,7 @@ public class OTPService {
     private final Map<String, String> otpCache = new HashMap<>();
     private final Map<String, Long> timestampCache = new HashMap<>();
 
-    private static final long OTP_EXPIRY_TIME = 60 * 1000; // 1 minute in milliseconds
+    private static final long OTP_EXPIRY_TIME = 60 * 5000; // 1 minute in milliseconds
 
     // Send OTP email
     public boolean sendOtp(String to, String subject, String message) {

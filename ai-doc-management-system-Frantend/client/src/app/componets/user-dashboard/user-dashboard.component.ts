@@ -20,6 +20,7 @@ export class UserDashboardComponent {
   constructor(private router:Router,private authService:AuthService,private folderService:FolderService) { }
 
   ngOnInit(){
+    
     this.getAllFolders();
   }
   n:number = 4
@@ -39,7 +40,9 @@ export class UserDashboardComponent {
   onFolderDeleted(){
     this.getAllFolders()
   }
-
+  onFolderUpdate(){
+    this.getAllFolders()
+  }
   logout() {
     this.authService.logOut();
     this.router.navigate(['/home']);

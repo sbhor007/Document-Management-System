@@ -63,7 +63,7 @@ export class RegisterComponent {
 
     console.log('Register data:', this.registerData);
 
-    this.authService.checkEmailExists(this.registeredEmail).subscribe({
+    this.emailService.checkEmailExists(this.registeredEmail).subscribe({
       next: (response) => {
         console.log('Email check response:', response);
         if (response.data === true) {
@@ -77,6 +77,7 @@ export class RegisterComponent {
       error: (error) => {
         console.error('Error checking email:', error);
         this.loading = false;
+        this
         this.errorMessage = error.error?.message || 'Error checking email. Please try again.';
       }
     });

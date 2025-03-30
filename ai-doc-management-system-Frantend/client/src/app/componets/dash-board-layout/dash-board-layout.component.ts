@@ -9,6 +9,7 @@ import { error } from 'console';
 import { FormsModule } from '@angular/forms';
 import { DocumentService } from '../../service/document.service';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-dash-board-layout',
@@ -26,16 +27,22 @@ export class DashBoardLayoutComponent {
   constructor(
     private userService: UsersService,
     private documentService: DocumentService,
-    private router: Router
+    private router: Router,
+    private authService:AuthService
   ) {
     this.loadUserData();
   }
 
   ngOnInit(): void {
     
+    if(!this.authService.isLoggedIn())
+    {
+      this.router.navigate(['/home'])
+      return
+    }
     this.loadDocuments();
-    console.log("user data : "+this.user);
-    console.log("user data : "+ this.userService.userData);
+    // console.log("user data : "+this.user);
+    // console.log("user data : "+ this.userService.userData);
     
   }
 

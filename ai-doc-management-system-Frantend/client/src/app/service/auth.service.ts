@@ -38,7 +38,7 @@ export class AuthService {
 
 
   checkEmailExists(email: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/email-exists/${email}`, this.httpOptions);
+    return this.http.get(`${this.baseUrl}/email-exists/${email}`);
   }
 
   registerUser(user:any): Observable<any>{

@@ -3,6 +3,7 @@ package com.documentManagementSystem.server.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.documentManagementSystem.server.enums.OTPValidationResponse;
 import com.documentManagementSystem.server.responce.ApiResponse;
+import com.documentManagementSystem.server.service.AuthService;
 import com.documentManagementSystem.server.service.OTPService;
+import com.documentManagementSystem.server.service.UserService;
 
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +26,13 @@ import lombok.extern.slf4j.Slf4j;
 public class OTPController {
 	@Autowired
     private OTPService otpService;
+	
+	@Autowired
+	private AuthService userService;
 
-	@PostMapping("/sendOtp")
-	public ResponseEntity<ApiResponse<String>> sendOtp(@RequestBody String to) {
+	@PostMapping("/sendOtp/{to}")
+	public ResponseEntity<ApiResponse<String>> sendOtp(@PathVariable String to) {
+		log.info("Otp Send to {}",to);
 	    boolean isOtpSent = otpService.sendOtp(to, "OTP", "Verification OTP: ");
 
 	    if (isOtpSent) {
@@ -38,7 +45,19 @@ public class OTPController {
 	    }
 	}
 	
-
+//	 / New endpoint to check if email exists
+    @GetMapping("/email-exists/{email}")
+    public ResponseEntity<ApiResponse<Boolean>> checkEmailExists(@PathVariable String email) {
+        log.info("Checking if email exists: {}", email);
+        try {
+            boolean exists = userService.emailExists(email);
+            return ResponseEntity.ok(new ApiResponse<>("success", "Email check completed", exists));
+        } catch (RuntimeException e) {
+            log.error("Error checking email: {}, error: {}", email, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>("error", e.getMessage(), null));
+        }
+    }
 
     // Endpoint to validate OTP
     @PostMapping("/validateOtp/{email}/{otp}")

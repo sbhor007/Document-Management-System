@@ -28,8 +28,15 @@ export class EmailServiceService {
     
   //   return this.http.post(`${this.baseUrl}/validateOtp/${email}/${otp}`, this.httpOptions);
   // }
+
+  checkEmailExists(email: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/email-exists/${email}`,this.httpOptions);
+  }
+
   sendOtp(email: string): Observable<boolean> {
-    return this.http.post<any>(`${this.baseUrl}/sendOtp`, email)
+    console.log(email);
+    
+    return this.http.post<any>(`${this.baseUrl}/sendOtp/${email}`,{})
       .pipe(
         map(response => {
           if (response.status === 'success') {

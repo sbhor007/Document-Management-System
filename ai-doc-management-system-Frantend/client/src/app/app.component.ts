@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DashBoardLayoutComponent } from "./componets/dash-board-layout/dash-board-layout.component";
+import { AuthService } from './service/auth.service';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +10,19 @@ import { DashBoardLayoutComponent } from "./componets/dash-board-layout/dash-boa
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  constructor(private authService:AuthService){}
+  ngOnInit(): void {
+  //  console.log("Window closed : ",window.closed);
+  //  if(window.closed){
+  //   this.authService.logOut()
+  //  }
+  window.onload = () =>{
+    this.authService.logOut()
+  }
+   
+   
+  }
   title = 'client';
+  
 }
