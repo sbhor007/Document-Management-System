@@ -19,7 +19,6 @@ export class FolderComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private myTost: ToastrService,
     private folderService: FolderService
   ) {}
 
@@ -29,7 +28,7 @@ export class FolderComponent implements OnInit {
 
   openFolder(myFolder: any) {
     console.log('Folder Opened', myFolder);
-    this.myTost.success('Folder Opened');
+    // this.myTost.success('Folder Opened');
     this.router.navigate(['/documents/details', myFolder.folderId], {
       state: { documents: myFolder },
     });
@@ -41,14 +40,14 @@ export class FolderComponent implements OnInit {
     this.folderService.getFolderDetails(this.folder.folderId).subscribe({
       next: (response: any) => {
         console.log('Folder Details:', response);
-        this.myTost.info('Folder details fetched');
+        // this.myTost.info('Folder details fetched');
         this.router.navigate(['/documents/details', this.folder.folderId], {
           state: { documents: response.data || this.folder },
         });
       },
       error: (error) => {
         console.error('Error fetching folder details:', error);
-        this.myTost.error('Failed to fetch folder details');
+        // this.myTost.error('Failed to fetch folder details');
       },
     });
   }
@@ -71,14 +70,14 @@ export class FolderComponent implements OnInit {
     if (confirm(`Are you sure you want to delete "${this.folder.folderName}"?`)) {
       this.folderService.deleteFolder(this.folder.folderId).subscribe({
         next: () => {
-          this.myTost.success('Folder deleted successfully');
+          // this.myTost.success('Folder deleted successfully');
           this.folderDeleted.emit(); // Emit event to notify parent
           // Optionally remove navigation if you want to stay on the dashboard
           // this.router.navigate(['/user-dashboard']); 
         },
         error: (error) => {
           console.error('Error deleting folder:', error);
-          this.myTost.error('Failed to delete folder');
+          // this.myTost.error('Failed to delete folder');
         },
       });
     }

@@ -106,11 +106,17 @@ public class FolderService {
 
         try {
         	documentService.deleteAllDocumentsByFolder(folderId, username);
-        	
+        	folderRepository.delete(folder);
         } catch (Exception e) {
             log.error("Failed to delete folder ID: {} for user: {}, error: {}", folderId, username, e.getMessage());
             throw new RuntimeException("Failed to delete folder: " + e.getMessage());
         }
+    }
+    
+    public void deleteAllFolders(List<Folder> folders,String username) {
+    	for(Folder f:folders) {
+			
+		}
     }
     
     public FolderResponse updateFolder(Long folderId, FolderRequest request, String username) {

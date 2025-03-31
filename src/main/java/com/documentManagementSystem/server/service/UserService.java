@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.documentManagementSystem.server.entity.Folder;
 import com.documentManagementSystem.server.entity.Users;
+import com.documentManagementSystem.server.repository.FolderRepository;
 import com.documentManagementSystem.server.repository.UsersRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -17,6 +20,14 @@ public class UserService {
 	
 	@Autowired
 	private UsersRepository userRepository;
+	
+	@Autowired
+	private DocumentServiceV2 documentService;
+	
+//	@Autowired
+//	private FolderService folderService;
+	@Autowired
+	private FolderRepository folderRepository;
 	
 	private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 	
@@ -97,7 +108,40 @@ public class UserService {
         }
     }
 	
-//	public 
-	
+	@Transactional
+	public void deleteUser(String username) {
+	    if (username == null) {
+	        log.error("Username is null while deleting user");
+	        throw new RuntimeException("Username cannot be null");
+	    }
+	    
+	    Users user = userRepository.findByUserName(username);
+	    if (user == null) {
+	        log.error("User not found: {}", username);
+	        throw new RuntimeException("User not found: " + username);
+	    }
+	    
+	    try {
+	        // Delete all documents in user's folders and the folders themselves
+	    	List<Folder> foldersList = user.getFolders();
+	        for (Folder f : user.getFolders()) {
+	            log.debug("Deleting documents in folder ID: {} for user: {}", f.getId(), username);
+	            documentService.deleteAllDocumentsByFolder(f.getId(), username);
+//	            folderService.deleteFolder(f.getId(), username);
+//	            folderRepository.deleteById(f.getId());
+	            log.debug("Deleting folder ID: {} for user: {}", f.getId(), username);
+//	            folderRepository.delete(f); // Explicitly delete the folder
+	        }
+	        folderRepository.deleteAll(foldersList);
+	        // Now delete the user
+	        log.debug("Deleting user: {}", username);
+	        userRepository.delete(user);
+	        log.info("Successfully deleted user: {}", username);
+	        
+	    } catch (Exception e) {
+	        log.error("Error deleting user: {}, error: {}", username, e.getMessage(), e);
+	        throw new RuntimeException("Failed to delete user: " + e.getMessage());
+	    }
+	}
 	
 }

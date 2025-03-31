@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -170,20 +171,22 @@ public class AuthController {
 	                    .body(new ApiResponse<>("error", e.getMessage(), null));
 	        }
 	    }
-	   /* public ResponseEntity<ApiResponce<Users>> updateUser(
-	            @PathVariable Long userId,
-	            @RequestBody Users updatedUser) {
-	        log.info("Updating user with ID: {}, data: {}", userId, updatedUser);
+	    
+	    @DeleteMapping("/users/{username}")  // Changed to use path variable instead of request body
+	    public ResponseEntity<ApiResponse<?>> deleteUser(@PathVariable String username) {
 	        try {
-	            Users savedUser = userService.updateUser(userId, updatedUser);
-	            return ResponseEntity.status(HttpStatus.OK)
-	                    .body(new ApiResponce<>("success", "User updated successfully", savedUser));
+	            userService.deleteUser(username);
+	            return ResponseEntity.ok(
+	                new ApiResponse<>("success", "User " + username + " deleted successfully")
+	            );
 	        } catch (RuntimeException e) {
-	            log.error("Error updating user with ID: {}, error: {}", userId, e.getMessage());
-	            HttpStatus status = e.getMessage().contains("not found") ? HttpStatus.NOT_FOUND :
-	                               HttpStatus.BAD_REQUEST;
-	            return ResponseEntity.status(status)
-	                    .body(new ApiResponce<>("error", e.getMessage(), null));
+	            return ResponseEntity
+	                .status(HttpStatus.BAD_REQUEST)
+	                .body(new ApiResponse<>("error", e.getMessage()));
+	        } catch (Exception e) {
+	            return ResponseEntity
+	                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body(new ApiResponse<>("error", "Failed to delete user: " + e.getMessage()));
 	        }
-	    }*/
+	    }
 }

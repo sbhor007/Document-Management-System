@@ -2,4 +2,4 @@
 @tailwind components;
 @tailwind utilities;
 
-@import 'ngx-toastr/toastr';
+@import 'notyf/notyf.min.css';

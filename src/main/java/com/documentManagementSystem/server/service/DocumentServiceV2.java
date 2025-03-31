@@ -130,42 +130,34 @@ public class DocumentServiceV2 {
         }
         return new InputStreamResource(new ByteArrayInputStream(document.getFileContent()));
     }
-    
+  
     @Transactional
     public void deleteAllDocumentsByFolder(Long folderId, String username) {
         log.info("Attempting to delete all documents in folder ID: {} by user: {}", folderId, username);
         
         Folder folder = folderRepository.findById(folderId)
-            .orElseThrow(() -> new RuntimeException("Folder not found with ID: " + folderId));
-        
-        if (!folder.getUser().getUserName().equals(username)) {
-            log.warn("Unauthorized attempt to delete documents in folder {} by user {}", folderId, username);
-            throw new RuntimeException("Unauthorized: You don't have permission to delete documents in this folder");
-        }
+            .orElseThrow(() -> {
+                log.error("Folder not found with ID: {}", folderId);
+                return new RuntimeException("Folder not found with ID: " + folderId);
+            });
         
         try {
             List<Document> documents = documentRepository.findByFolderId(folderId);
             
             if (documents.isEmpty()) {
                 log.info("No documents found in folder ID: {} to delete", folderId);
-                folderRepository.delete(folder);
-                log.info("Deleted empty folder with ID: {}", folderId);
                 return;
             }
             
             documentRepository.deleteAll(documents);
             log.info("Successfully deleted {} documents from folder ID: {}", documents.size(), folderId);
             
-            // Delete the folder after all documents are removed
-            folderRepository.delete(folder);
-            log.info("Deleted folder with ID: {} after removing all documents", folderId);
-            
         } catch (Exception e) {
-            log.error("Error deleting documents from folder ID {}: {}", folderId, e.getMessage());
-            throw new RuntimeException("Failed to delete documents: " + e.getMessage());
+            log.error("Error deleting documents from folder ID: {} for user: {}, error: {}", 
+                    folderId, username, e.getMessage(), e);
+            throw new RuntimeException("Failed to delete documents in folder ID " + folderId + ": " + e.getMessage());
         }
     }
-
     @Transactional
     public void deleteDocument(Long documentId, String username) {
         log.info("Attempting to delete document with ID: {} by user: {}", documentId, username);

@@ -20,12 +20,12 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    provideAnimations(), // Instead of BrowserAnimationsModule
-    provideToastr({     // Instead of ToastrModule.forRoot()
-      timeOut: 3000,
-      positionClass: 'toast-top-right',
-      preventDuplicates: true,
-    }),
+    // provideAnimations(), // Required for ngx-toastr
+    // provideToastr({
+    //   timeOut: 3000,
+    //   positionClass: 'toast-top-right',
+    //   preventDuplicates: true,
+    // }),
     NgxDocViewerModule,
     NgxExtendedPdfViewerModule
     

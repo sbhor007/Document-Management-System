@@ -8,6 +8,7 @@ import {
   Validators,
   FormsModule,
 } from '@angular/forms';
+// import { Notyf } from 'notyf';
 import { AuthService } from '../../service/auth.service';
 
 @Component({
@@ -18,11 +19,12 @@ import { AuthService } from '../../service/auth.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
+  // private notyf = new Notyf();
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     this.loginForm = this.fb.group({
       userName: ['', [Validators.required, Validators.email]],
@@ -42,10 +44,11 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('roll');
   }
   ngOnInit() {
-    
+    // this.notyf.success('Login successful!');
   }
 
   onSubmit() {
+    
     if(this.roll?.value) {
       this.loginForm.get('roll')?.setValue("ADMIN");
     }else{
@@ -61,9 +64,11 @@ export class LoginComponent implements OnInit {
           console.log(response);
           
           this.authService.storeTokenDetails(response);
-          alert('Login success');
+          // alert('Login success');
 
           if(response.data.roll === 'USER') {
+            console.log("navigate to user");
+            
             this.router.navigate(['/user-dashboard']);
           }
           else{

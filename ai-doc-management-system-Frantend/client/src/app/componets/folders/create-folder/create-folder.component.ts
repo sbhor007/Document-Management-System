@@ -3,7 +3,6 @@ import { AcceptFolderDetailsComponent } from "../accept-folder-details/accept-fo
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FolderService } from '../../../service/folder.service';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-folder',
@@ -18,26 +17,26 @@ export class CreateFolderComponent {
   @Output() folderUpdated = new EventEmitter<void>();
   isVisible:boolean=false
 
-  constructor(private router:Router, private folderService:FolderService,private toster:ToastrService) { }
+  constructor(private router:Router, private folderService:FolderService) { }
 
   createNewFolder()
   {
     this.isVisible = !this.isVisible
-    this.toster.success('Folder Created Successfully');
+    // this.toster.success('Folder Created Successfully');
   }
 
   onFolderCreated() {
     this.folderCreated.emit();
-    this.toster.success('Folder Created Successfully');
+    // this.toster.success('Folder Created Successfully');
     this.isVisible = false;
   }
   updateFolder(){
     this.isVisible = !this.isVisible
-    this.toster.success('Folder Created Successfully');
+    // this.toster.success('Folder Created Successfully');
   }
   onFolderUpdate(){
     this.folderUpdated.emit();
-    this.toster.success('Folder Created Successfully');
+    // this.toster.success('Folder Created Successfully');
     this.isVisible = false;
   }
   onCloseModal() {

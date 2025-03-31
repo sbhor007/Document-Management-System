@@ -105,38 +105,39 @@
               <tr class="bg-gray-50">
                 <th
                   (click)="sortByName()"
-                  class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-sky-200 transition-all "
                 >
                   Name
                 </th>
                 <th
                   (click)="sortByEmail()"
-                  class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-sky-200 transition-all"
                 >
                   Email
                 </th>
                 <th
-                  class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hover:bg-sky-200 transition-all"
                 >
                   Role
                 </th>
                 <th
-                  class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-sky-200 transition-all"
                 >
                   Total Documents
                 </th>
                 <th
-                  class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-sky-200 transition-all "
                 >
                   Total Folders
                 </th>
                 <th
-                  class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                (click)="sortByStorage()"
+                  class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-sky-200 transition-all "
                 >
                   Used Storage
                 </th>
                 <th
-                  class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hover:bg-sky-200 transition-all "
                 >
                   Actions
                 </th>
@@ -170,7 +171,7 @@
                   <button
                     class="p-1 text-red-500 hover:text-red-700"
                     title="Delete"
-                    (click)="deleteUser(user.id, $event)"
+                    (click)="deleteUser(user.userName, $event)"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

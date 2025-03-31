@@ -46,6 +46,9 @@ export class AdminDashboardComponent implements OnInit {
     }
     this.loadCurrentUser();
     this.loadAllUsers();
+    console.log('Current user:', this.user);
+    console.log('All users:', this.filteredUsers);
+    
   }
 
   loadCurrentUser(): void {
@@ -99,21 +102,21 @@ export class AdminDashboardComponent implements OnInit {
     // Implement navigation to user detail page or open modal
   }
 
-  deleteUser(userId: number, event: Event): void {
+  deleteUser(username: string, event: Event): void {
     event.stopPropagation(); // Prevent row click event from triggering
     if (confirm('Are you sure you want to delete this user?')) {
-      console.log('Deleting user with ID:', userId);
+      console.log('Deleting user with ID:', username);
       // Implement the actual delete functionality here
       // You would need to add a delete method to your UsersService
-      // this.usersService.deleteUser(userId).subscribe({
-      //   next: () => {
-      //     this.allUsers = this.allUsers.filter(user => user.id !== userId);
-      //     this.filteredUsers = this.filteredUsers.filter(user => user.id !== userId);
-      //   },
-      //   error: (error) => {
-      //     console.error('Error deleting user:', error);
-      //   }
-      // });
+      this.usersService.deleteUser(username).subscribe({
+        next: () => {
+          this.allUsers = this.allUsers.filter(user => user.userName !== username);
+          this.filteredUsers = this.filteredUsers.filter(user => user.userName !== username);
+        },
+        error: (error) => {
+          console.error('Error deleting user:', error);
+        }
+      });
     }
   }
 
@@ -157,6 +160,24 @@ export class AdminDashboardComponent implements OnInit {
       this.filteredUsers.sort((a, b) => a.userName.localeCompare(b.userName));
     }else{
       this.filteredUsers.sort((b, a) => a.userName.localeCompare(b.userName));
+    }
+  }
+
+  sortByStorage(): void {
+    this.isSortByStorage = !this.isSortByStorage;
+    if (this.isSortByStorage) {
+      this.filteredUsers.sort((a, b) => {
+      
+        const sizeA = this.getUsedStorageSize(a);
+        const sizeB = this.getUsedStorageSize(b);
+        return sizeA - sizeB;
+      });
+    } else {
+      this.filteredUsers.sort((b, a) => {
+        const sizeA = this.getUsedStorageSize(a);
+        const sizeB = this.getUsedStorageSize(b);
+        return sizeA - sizeB;
+      });
     }
   }
 

@@ -144,7 +144,7 @@ public class SecurityConfig {
 		return http.csrf(Customizer -> Customizer.disable())
 
 				.authorizeHttpRequests(request -> request
-						.requestMatchers("/api/auth/**","/helth","/api/auth/logins","/api/email/**","/validateOtp/**","/forgot-password/**")
+						.requestMatchers("/api/auth/**","/helth","/api/auth/logins","/api/email/**","/validateOtp/**","/forgot-password/**","/api/auth/users/**")
 						.permitAll()
 						.anyRequest().authenticated()
 						)

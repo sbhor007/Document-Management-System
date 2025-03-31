@@ -35,11 +35,11 @@ export class DashBoardLayoutComponent {
 
   ngOnInit(): void {
     
-    if(!this.authService.isLoggedIn())
-    {
-      this.router.navigate(['/home'])
-      return
-    }
+    // if(!this.authService.isLoggedIn())
+    // {
+    //   this.router.navigate(['/home'])
+    //   return
+    // }
     this.loadDocuments();
     // console.log("user data : "+this.user);
     // console.log("user data : "+ this.userService.userData);

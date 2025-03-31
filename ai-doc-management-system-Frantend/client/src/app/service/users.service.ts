@@ -17,4 +17,8 @@ export class UsersService {
   getUsers(): Observable<any> {
     return this.http.get(`${this.baseUrl}/all-users`);
   }
+
+  deleteUser(username:string):Observable<any>{
+    return this.http.delete(`${this.baseUrl}/users/${username}`)
+  }
 }
