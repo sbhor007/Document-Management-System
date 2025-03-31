@@ -73,10 +73,14 @@ public class AuthController {
 	        log.info("Login credentials: {}", user);
 	        try {
 	            String jwtToken = authService.verify(user);
-	            if (jwtToken != null) {
+	            Users u = authService.getUser(user.getUserName());
+	            log.info("{} : {}",u.getRoll(),user.getRoll());
+	            if (jwtToken != null && u.getRoll().equals(user.getRoll())) {
 	                Map<String, Object> tokenDetails = new HashMap<>();
 	                tokenDetails.put("token", jwtToken);
 	                tokenDetails.put("expiryTime", 60 * 1000 * 60 * 24);
+	                
+	                tokenDetails.put("roll", u.getRoll());
 	                return ResponseEntity.ok(new ApiResponse<>("success", "Login successful", tokenDetails));
 	            } else {
 	                log.warn("Login failed for user: {}", user);

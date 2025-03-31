@@ -57,7 +57,8 @@ export class RegisterComponent {
     this.registerData = {
       name: this.f['name'].value,
       userName: this.f['userName'].value,
-      password: this.f['password'].value
+      password: this.f['password'].value,
+      roll:"USER"
     };
     this.registeredEmail = this.registerData.userName;
 

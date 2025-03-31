@@ -30,6 +30,9 @@ public class Users {
 
     @Column(nullable = false)
     private String password;
+    
+    @Column(nullable = false)
+    private String roll;
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

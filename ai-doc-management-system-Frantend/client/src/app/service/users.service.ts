@@ -14,4 +14,7 @@ export class UsersService {
   getUser(): Observable<any>{
     return this.http.get(`${this.baseUrl}/user`)
   }
+  getUsers(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/all-users`);
+  }
 }

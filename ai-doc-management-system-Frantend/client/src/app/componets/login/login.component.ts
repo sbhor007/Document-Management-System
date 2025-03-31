@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       userName: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
+      roll: [false],
     });
   }
 
@@ -37,22 +38,38 @@ export class LoginComponent implements OnInit {
   get password() {
     return this.loginForm.get('password');
   }
-
+  get roll() {
+    return this.loginForm.get('roll');
+  }
   ngOnInit() {
     
   }
 
   onSubmit() {
+    if(this.roll?.value) {
+      this.loginForm.get('roll')?.setValue("ADMIN");
+    }else{
+      this.loginForm.get('roll')?.setValue("USER");
+    }
+    console.log(this.roll?.value,"is Admin");
     console.log('loginForm', this.loginForm.value);
+    
 
     if (this.loginForm.valid) {
       this.authService.loginUser(this.loginForm.value).subscribe(
-        (data) => {
-          console.log(data);
+        (response) => {
+          console.log(response);
           
-          this.authService.storeTokenDetails(data);
+          this.authService.storeTokenDetails(response);
           alert('Login success');
-          this.router.navigate(['/user-dashboard']);
+
+          if(response.data.roll === 'USER') {
+            this.router.navigate(['/user-dashboard']);
+          }
+          else{
+            this.router.navigate(['/admin-dashboard']);
+          }
+          
         },
         (error) => {
           console.log(error);

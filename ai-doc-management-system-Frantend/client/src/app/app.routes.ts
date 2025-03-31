@@ -10,6 +10,7 @@ import { UploadDocumentsComponent } from './componets/documents/upload-documents
 import { ViewDocumentComponent } from './componets/documents/view-document/view-document.component';
 import { ViewDocumentV2Component } from './componets/documents/view-document-v2/view-document-v2.component';
 import { ForgotPasswordComponent } from './componets/forgot-password/forgot-password.component';
+import { AdminDashboardComponent } from './componets/Admin/admin-dashboard/admin-dashboard.component';
 
 // export const routes: Routes = [
 //     {
@@ -64,6 +65,7 @@ import { ForgotPasswordComponent } from './componets/forgot-password/forgot-pass
 
 
 export const routes: Routes = [
+  
   {
     path: '',
     redirectTo: '/home',
@@ -90,6 +92,10 @@ export const routes: Routes = [
         component:ForgotPasswordComponent
       }
     ]
+  },
+  {
+    path:'admin-dashboard',
+    component:AdminDashboardComponent
   },
   {
     path: 'user-dashboard',

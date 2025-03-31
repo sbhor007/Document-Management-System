@@ -21,6 +21,7 @@ export class AuthService {
     
     localStorage.setItem('token',tokenDetails.data.token)
     localStorage.setItem('expiryTime',(tokenDetails.data.expiryTime  + Date.now()))
+    localStorage.setItem('roll',tokenDetails.data.roll)
   }
 
 

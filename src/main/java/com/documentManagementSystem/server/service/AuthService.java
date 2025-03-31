@@ -33,6 +33,7 @@ public class AuthService {
 	
 	public Users register(Users user) {
         try {
+        	
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
         } catch (Exception e) {
@@ -42,6 +43,9 @@ public class AuthService {
 
     public String verify(Users user) {
         try {
+        	
+        	
+        	
             Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
             if (authentication.isAuthenticated()) {
                 return jwtService.generateToken(user.getUserName());
@@ -62,8 +66,8 @@ public class AuthService {
     public Users getUser(String usernamr) {
     	return userRepository.findByUserName(usernamr);
     }
-
-	
+    
+    
 
 	
 
