@@ -38,4 +38,4 @@ For more details on the client-side setup, refer to the existing content in this
 
 ```
 
-Would you like to proceed with adding this content to the README.md file?
+...........
