@@ -49,25 +49,42 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     
+    // if(this.roll?.value) {
+    //   this.loginForm.get('roll')?.setValue("ADMIN");
+    // }else{
+    //   this.loginForm.get('roll')?.setValue("USER");
+    // }
+    let userData = {};
     if(this.roll?.value) {
-      this.loginForm.get('roll')?.setValue("ADMIN");
-    }else{
-      this.loginForm.get('roll')?.setValue("USER");
+      userData ={
+        userName: this.userName?.value,
+        password: this.password?.value,
+        roll: "ADMIN",
+      }
     }
-    console.log(this.roll?.value,"is Admin");
-    console.log('loginForm', this.loginForm.value);
+    else{
+      userData ={
+        userName: this.userName?.value,
+        password: this.password?.value,
+        roll: "USER",
+      }
+    }
+    
+    // console.log(this.roll?.value,"is Admin");
+    // console.log('loginForm', this.loginForm.value);
+    console.log(userData, "userData");
     
 
     if (this.loginForm.valid) {
-      this.authService.loginUser(this.loginForm.value).subscribe(
+      this.authService.loginUser(userData).subscribe(
         (response) => {
-          console.log(response);
+          // console.log(response);
           
           this.authService.storeTokenDetails(response);
-          // alert('Login success');
+          alert('Login success');
 
           if(response.data.roll === 'USER') {
-            console.log("navigate to user");
+            // console.log("navigate to user");
             
             this.router.navigate(['/user-dashboard']);
           }

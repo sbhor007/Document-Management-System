@@ -61,7 +61,7 @@
        >
          <div class="text-sm text-gray-700 mb-3">
            Total
-           <span class="font-medium">{{ filteredUsers.length }}</span> users
+           <span class="font-medium">{{ filteredUsers.length-1 }}</span> users
          </div>
          <!-- <div class="flex space-x-2">
            <button
@@ -144,8 +144,9 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
+              @for(user of  filteredUsers; track user){
               <tr
-                *ngFor="let user of filteredUsers"
+                *ngIf="user.roll != 'ADMIN'"
                 class="hover:bg-gray-50 transition-colors cursor-pointer"
                 (click)="viewUser(user)"
               >
@@ -190,6 +191,7 @@
                   </button>
                 </td>
               </tr>
+            }
             </tbody>
           </table>
         </div>

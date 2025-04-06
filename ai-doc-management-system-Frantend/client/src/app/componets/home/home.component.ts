@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
-    console.log(this.authService.isLoggedIn());
+    // console.log(this.authService.isLoggedIn());
     if (this.authService.isLoggedIn()) {
       localStorage.getItem('roll') === 'ADMIN'
         ? this.router.navigate(['/admin-dashboard'])

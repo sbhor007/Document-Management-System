@@ -19,15 +19,15 @@ export class AuthService {
 
   storeTokenDetails(tokenDetails:any):void{
     
-    localStorage.setItem('token',tokenDetails.data.token)
-    localStorage.setItem('expiryTime',(tokenDetails.data.expiryTime  + Date.now()))
-    localStorage.setItem('roll',tokenDetails.data.roll)
+    sessionStorage.setItem('token',tokenDetails.data.token)
+    sessionStorage.setItem('expiryTime',(tokenDetails.data.expiryTime  + Date.now()))
+    sessionStorage.setItem('roll',tokenDetails.data.roll)
   }
 
 
 
   isTokenExpire(): boolean {
-    const expiryTime = localStorage.getItem('expiryTime');
+    const expiryTime = sessionStorage.getItem('expiryTime');
     if (expiryTime) {
       const now = new Date().getTime();
       if (now > parseInt(expiryTime)) {
@@ -61,11 +61,11 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    return !!sessionStorage.getItem('token');
   }
 
   logOut(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('expiryTime');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('expiryTime');
   }
 }

@@ -23,7 +23,7 @@ public class Document {
     @Column(nullable = false)
     private String fileType;
 
-////    @Column(nullable = false)
+//    @Column(nullable = false)
     private String s3Url; // Amazon S3 URL for document storage.
 ////    TODO: remove it
 //    

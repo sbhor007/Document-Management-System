@@ -11,6 +11,7 @@ import { ViewDocumentComponent } from './componets/documents/view-document/view-
 import { ViewDocumentV2Component } from './componets/documents/view-document-v2/view-document-v2.component';
 import { ForgotPasswordComponent } from './componets/forgot-password/forgot-password.component';
 import { AdminDashboardComponent } from './componets/Admin/admin-dashboard/admin-dashboard.component';
+import { authGuardGuard } from './Guard/auth-guard.guard';
 
 // export const routes: Routes = [
 //     {
@@ -95,7 +96,8 @@ export const routes: Routes = [
   },
   {
     path:'admin-dashboard',
-    component:AdminDashboardComponent
+    component:AdminDashboardComponent,
+    canActivate:[authGuardGuard]
   },
   {
     path: 'user-dashboard',

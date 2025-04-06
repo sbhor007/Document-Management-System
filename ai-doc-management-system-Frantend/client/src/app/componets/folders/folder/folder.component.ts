@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { FolderService } from '../../../service/folder.service';
 import { AcceptFolderDetailsComponent } from "../accept-folder-details/accept-folder-details.component";
 import { CommonModule } from '@angular/common';
@@ -23,12 +22,13 @@ export class FolderComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log(this.folder);
+    // console.log(this.folder);
   }
 
   openFolder(myFolder: any) {
-    console.log('Folder Opened', myFolder);
+    // console.log('Folder Opened', myFolder);
     // this.myTost.success('Folder Opened');
+    this.folderService.addOpenedFolder(myFolder);
     this.router.navigate(['/documents/details', myFolder.folderId], {
       state: { documents: myFolder },
     });
@@ -39,14 +39,15 @@ export class FolderComponent implements OnInit {
     
     this.folderService.getFolderDetails(this.folder.folderId).subscribe({
       next: (response: any) => {
-        console.log('Folder Details:', response);
+        // console.log('Folder Details:', response);
         // this.myTost.info('Folder details fetched');
+        this.folderService.addOpenedFolder(response.data);
         this.router.navigate(['/documents/details', this.folder.folderId], {
           state: { documents: response.data || this.folder },
         });
       },
       error: (error) => {
-        console.error('Error fetching folder details:', error);
+        // console.error('Error fetching folder details:', error);
         // this.myTost.error('Failed to fetch folder details');
       },
     });
@@ -70,9 +71,9 @@ export class FolderComponent implements OnInit {
     if (confirm(`Are you sure you want to delete "${this.folder.folderName}"?`)) {
       this.folderService.deleteFolder(this.folder.folderId).subscribe({
         next: () => {
-          // this.myTost.success('Folder deleted successfully');
-          this.folderDeleted.emit(); // Emit event to notify parent
-          // Optionally remove navigation if you want to stay on the dashboard
+          
+          this.folderDeleted.emit();
+          // location.reload() 
           // this.router.navigate(['/user-dashboard']); 
         },
         error: (error) => {
@@ -86,6 +87,7 @@ export class FolderComponent implements OnInit {
   onFolderUpdated() {
     this.folderUpdated.emit();
     this.isVisible = false;
+    location.reload()
   }
 
   updateFolder(event: Event) {

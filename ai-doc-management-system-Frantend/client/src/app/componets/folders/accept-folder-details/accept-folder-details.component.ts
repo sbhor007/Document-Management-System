@@ -56,44 +56,17 @@ export class AcceptFolderDetailsComponent implements OnInit {
     return this.createFolderForm.get('folderDescription');
   }
 
-  // submitForm() {
-  //   if (this.createFolderForm.valid) {
-  //     const folderData = this.createFolderForm.value;
-  //     const serviceCall = this.folderId > 0
-  //       ? this.folderService.updateFolder(this.folderId, folderData)
-  //       : this.folderService.createFolder(folderData);
-
-  //     serviceCall.subscribe({
-  //       next: (data) => {
-  //         console.log(this.folderId > 0 ? 'Folder updated:' : 'Folder created:', data);
-  //         if (this.folderId > 0) {
-  //           this.folderUpdated.emit();
-  //           alert('Folder updated successfully');
-  //         } else {
-  //           this.folderCreated.emit();
-  //           alert('Folder created successfully');
-  //         }
-  //         this.close();
-  //       },
-  //       error: (error) => {
-  //         console.error(this.folderId > 0 ? 'Error updating folder:' : 'Error creating folder:', error);
-  //         alert(`Operation failed: ${error.error?.message || 'Unknown error'}`);
-  //       },
-  //     });
-  //   } else {
-  //     this.createFolderForm.markAllAsTouched();
-  //   }
-  // }
+  
 
   submitForm() {
-    console.log(`submit Form : accept`);
+    // console.log(`submit Form : accept`);
     
     if (this.createFolderForm.valid) {
       const folderData = this.createFolderForm.value;
       const serviceCall = this.folderId > 0
         ? this.folderService.updateFolder(this.folderId, folderData)
         : this.folderService.createFolder(folderData);
-        console.log(serviceCall);
+        // console.log(serviceCall);
         
       serviceCall.subscribe({
         next: (data) => {

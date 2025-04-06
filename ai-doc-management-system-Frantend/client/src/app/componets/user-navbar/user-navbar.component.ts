@@ -4,6 +4,7 @@ import { AuthService } from '../../service/auth.service';
 import { DocumentService } from '../../service/document.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FolderService } from '../../service/folder.service';
 
 @Component({
   selector: 'app-user-navbar',
@@ -14,13 +15,16 @@ import { CommonModule } from '@angular/common';
 })
 export class UserNavbarComponent implements OnInit {
   documents:any[] = []
+  folders:any[] = []
   constructor(
     private router: Router,
     private authService: AuthService,
-    private documentService: DocumentService
+    private documentService: DocumentService,
+    private folderService: FolderService
   ) {}
   ngOnInit(): void {    
     this.documents=this.documentService.openedDocument
+    this.folders=this.folderService.openedFolders
   }
 
   mainMenu = [
@@ -48,6 +52,20 @@ export class UserNavbarComponent implements OnInit {
     this.router.navigate(['/documents/view-document'], {
       state: { document: document }
     });
+  }
+
+  openFolder(event: Event,myFolder: any) {
+    event.stopPropagation();
+    // console.log('Folder Opened', myFolder);
+    // this.myTost.success('Folder Opened');
+    this.folderService.addOpenedFolder(myFolder);
+    this.router.navigate(['/documents/details', myFolder.folderId], {
+      state: { documents: myFolder },
+    });
+  }
+  goHome(event:any){
+    event.stopPropagation()
+    this.router.navigate(['/user-dashboard'])
   }
 
   logout() {

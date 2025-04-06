@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { DocumentDetailsComponent } from "../document-details/document-details.component";
 import { UserNavbarComponent } from "../../user-navbar/user-navbar.component";
 import { Router, RouterModule } from '@angular/router';
-import { UploadDocumentsComponent } from "../upload-documents/upload-documents.component";
 
 @Component({
   selector: 'app-document-layout',
-  imports: [DocumentDetailsComponent, UserNavbarComponent, RouterModule, UploadDocumentsComponent],
+  imports: [ UserNavbarComponent, RouterModule],
   templateUrl: './document-layout.component.html',
   styleUrl: './document-layout.component.css'
 })

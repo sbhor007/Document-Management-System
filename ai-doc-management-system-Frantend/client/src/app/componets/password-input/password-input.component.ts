@@ -2,8 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../service/auth.service';
-import { response } from 'express';
-import { error } from 'console';
 import { Router } from '@angular/router';
 
 @Component({
@@ -63,12 +61,12 @@ export class PasswordInputComponent implements OnInit {
 
     this.authService.forgotPassword(newPasswordData).subscribe({
       next: (response) => {
-        console.log('Password updated successfully:', response);
+        // console.log('Password updated successfully:', response);
         this.passwordChanged.emit(this.f['newPassword'].value);
         this.router.navigate(['/home/login']);
       },
       error: (error) => {
-        console.log("Failed to update password", error);
+        // console.log("Failed to update password", error);
         this.errorMessage = error.error?.message || 'Failed to update password';
         this.loading = false;
       }

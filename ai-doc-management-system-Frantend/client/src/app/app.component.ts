@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { DashBoardLayoutComponent } from "./componets/dash-board-layout/dash-board-layout.component";
 import { AuthService } from './service/auth.service';
-import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, DashBoardLayoutComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -17,9 +15,9 @@ export class AppComponent implements OnInit {
   //  if(window.closed){
   //   this.authService.logOut()
   //  }
-  window.onload = () =>{
-    this.authService.logOut()
-  }
+  // window.onload = () =>{
+  //   this.authService.logOut()
+  // }
    
    
   }

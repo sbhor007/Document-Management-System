@@ -42,7 +42,7 @@
     </div>
 
     <!-- Document List (only shown if showDocuments is true) -->
-    <div *ngIf="showDocuments" class="fixed p-10 rounded-md z-50 h-screen overflow-hidden scroll-auto w-3/4 bg-gray-800 bg-opacity-40 backdrop-blur-sm transition-opacity duration-300 ease-in-out">
+    <div *ngIf="showDocuments" class="fixed p-10 rounded-md z-50 h-screen overflow-auto w-3/4 bg-gray-800 bg-opacity-40 backdrop-blur-sm transition-opacity duration-300 ease-in-out">
       <div class="mb-4">
         <h3 class="text-lg font-semibold text-gray-700">
           All Documents ({{ filteredDocuments.length }})
@@ -53,10 +53,11 @@
         <p>No documents found.</p>
       </div>
 
-      <div class="space-y-2">
+      <div class="space-y-2  rounded-lg bg-white ">
+        @for(doc of filteredDocuments; track doc){
+          <div class="flex ">
         <div
-          *ngFor="let doc of filteredDocuments"
-          class="flex items-center p-3 bg-white rounded-lg shadow-sm hover:bg-gray-50 cursor-pointer transition-colors"
+          class="flex items-center w-[97%] p-3 bg-white rounded-lg shadow-sm hover:bg-gray-50 cursor-pointer transition-colors"
           (click)="viewDocument(doc)"
         >
           <!-- Document Icon -->
@@ -81,6 +82,7 @@
                 d="M14 3v4a1 1 0 001 1h4"
               />
             </svg>
+            
           </div>
 
           <!-- Document Details -->
@@ -91,6 +93,29 @@
             </p>
           </div>
         </div>
+        
+          <button 
+          
+          class="rounded-lg px-3 shadow-sm hover:bg-gray-50 px-10 cursor-pointer transition-colors"
+          >
+            <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5 text-red-700 -mt-2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      (click)="deleteDocument(doc)"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+            </svg>
+          </button>
+        </div>
+      }
       </div>
     </div>
 

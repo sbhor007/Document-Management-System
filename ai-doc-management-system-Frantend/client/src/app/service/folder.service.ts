@@ -7,8 +7,20 @@ import { Observable } from 'rxjs';
 })
 export class FolderService {
   baseUrl = 'http://localhost:8080/api/folders';
+  openedFolders: any[] = [];
 
   constructor(private http: HttpClient) {}
+
+  addOpenedFolder(folder: any) {
+    const exists = this.openedFolders.some((folder) => folder.id === folder.id);
+    if (!exists) {
+      if (this.openedFolders.length > 3) {
+      this.openedFolders.pop(); // Remove the oldest document
+      }
+      this.openedFolders.unshift(document)
+      // this.openedDocument.push(document);
+    }
+  }
 
   getAllFolders(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/all-folders`);

@@ -7,7 +7,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   }
   // Check if we're in a browser environment before using localStorage
   if (typeof window !== 'undefined' && window.localStorage) {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (token) {
       req = req.clone({
         setHeaders: {

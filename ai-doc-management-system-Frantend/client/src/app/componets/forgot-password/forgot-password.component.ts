@@ -61,10 +61,10 @@ export class ForgotPasswordComponent {
         console.log('Email check response:', response);
         if (response.data === true) {
           this.loading = false;
-          console.log('Otp Send Successfully');
+          alert('Otp Send Successfully')
+          // console.log('Otp Send Successfully');
           this.sendOtp(this.enteredEmail);
           setTimeout(() => {
-            alert("hi")
             this.loading = false;
             this.showOtpModal = true;
           }, 2000);
@@ -76,17 +76,17 @@ export class ForgotPasswordComponent {
         }
       },
       error: (error) => {
-        console.error('Error checking email:', error);
+        // console.error('Error checking email:', error);
         this.loading = false;
-        this
-        this.errorMessage = error.error?.message || 'Error checking email. Please try again.';
+        // this.errorMessage = error.error?.message || 'Error checking email. Please try again.';
+        this.errorMessage = 'Error checking email. Please try again.';
       }
     })
 
     
   }
   private sendOtp(email: string) {
-    console.log('Sending OTP to:', email);
+    // console.log('Sending OTP to:', email);
     this.emailServices.sendOtp(email).subscribe({
       next: (response) => {
         if(response){
@@ -97,9 +97,10 @@ export class ForgotPasswordComponent {
         
       },
       error: (error) => {
-        console.error('Failed to send OTP:', error);
+        // console.error('Failed to send OTP:', error);
         this.loading = false;
-        this.errorMessage = error.message || 'Failed to send OTP. Please try again.';
+        // this.errorMessage = error.message || 'Failed to send OTP. Please try again.';
+        this.errorMessage = 'Failed to send OTP. Please try again.';
       }
     });
   }
@@ -108,18 +109,18 @@ export class ForgotPasswordComponent {
 
   
   onOtpVerified() {
-    console.log('OTP verified');
+    // console.log('OTP verified');
     this.showOtpModal = false; 
-    console.log('showOtpModal:', this.showOtpModal); // Log to check if it is false
+    // console.log('showOtpModal:', this.showOtpModal); // Log to check if it is false
     this.showInputPasswordModel = true;
-    console.log('showInputPasswordModel:', this.showInputPasswordModel); // Log to check if it is true
+    // console.log('showInputPasswordModel:', this.showInputPasswordModel); // Log to check if it is true
     alert("OTP Verified. You can now set a new password.");
   }
   
   
 
   onPasswordChanged(){
-    console.log('Password Changed');
+    // console.log('Password Changed');
     this.loading = true;
     this.showInputPasswordModel = false
     alert("Password changed")

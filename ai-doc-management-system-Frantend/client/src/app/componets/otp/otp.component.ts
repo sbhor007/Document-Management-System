@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Route, Router } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { EmailServiceService } from '../../service/email-service.service';
 
 @Component({
@@ -53,8 +53,9 @@ export class OtpComponent implements OnChanges {
         },
         error: (error) => {
           this.isVerifying = false;
-          this.errorMessage = error.message || 'OTP Verification failed';
-          console.error('OTP Verification error', error);
+          // this.errorMessage = error.message || 'OTP Verification failed';
+          this.errorMessage = 'OTP Verification failed';
+          // console.error('OTP Verification error', error);
         }
       });
     }
@@ -83,9 +84,10 @@ export class OtpComponent implements OnChanges {
       },
       error: (error) => {
         this.isResending = false;
-        this.errorMessage = error.message || 'Failed to resend OTP';
+        // this.errorMessage = error.message || 'Failed to resend OTP';
+        this.errorMessage = 'Failed to resend OTP';
         this.resendCooldown = 0;
-        console.error('Resend OTP error:', error);
+        // console.error('Resend OTP error:', error);
       }
     });
   }

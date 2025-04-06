@@ -1,97 +1,132 @@
 <div class="w-full min-h-screen bg-gray-50 flex flex-col">
   <!-- Header -->
-  <div class="flex justify-between items-center p-4 bg-white shadow-sm">
-    <h2 class="text-2xl font-bold">{{selectedDoc?.document.documentName}}</h2>
-    <button 
-      class="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-      (click)="goBack()"
-    >
-      Back to Documents
-    </button>
+  <div class="flex justify-between p-3 bg-white shadow-sm">
+    <h2 class="text-2xl font-bold">{{ selectedDoc?.document.documentName }}</h2>
+    <div class="flex items-center space-x-2">
+      <!-- Document toolbar -->
+      <div class="document-toolbar flex space-x-2" *ngIf="selectedDoc?.url">
+        <button 
+          class="py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 rounded-md transition-colors flex items-center" 
+          (click)="zoomIn()"
+          *ngIf="canZoom()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="11" y1="8" x2="11" y2="14"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+          Zoom In
+        </button>
+        <button 
+          class="py-1 px-3 text-sm bg-gray-100 hover:bg-gray-200 rounded-md transition-colors flex items-center" 
+          (click)="zoomOut()"
+          *ngIf="canZoom()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+          Zoom Out
+        </button>
+      </div>
+      
+      <!-- Download button -->
+      <button
+        class="group text-white rounded-md hover:stroke-blue-600 transition-colors"
+        (click)="downloadDocument()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="40px"
+          height="40px"
+          viewBox="0 0 24 24"
+          fill="none"
+          class="hover:text-blue-600 text-red-600 group-hover:stroke-blue-600"
+        >
+          <path
+            d="M12 12V19M12 19L9.75 16.6667M12 19L14.25 16.6667M6.6 17.8333C4.61178 17.8333 3 16.1917 3 14.1667C3 12.498 4.09438 11.0897 5.59198 10.6457C5.65562 10.6268 5.7 10.5675 5.7 10.5C5.7 7.46243 8.11766 5 11.1 5C14.0823 5 16.5 7.46243 16.5 10.5C16.5 10.5582 16.5536 10.6014 16.6094 10.5887C16.8638 10.5306 17.1284 10.5 17.4 10.5C19.3882 10.5 21 12.1416 21 14.1667C21 16.1917 19.3882 17.8333 17.4 17.8333"
+            stroke="#464455"
+            class="group-hover:stroke-blue-600"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </div>
   </div>
 
   <!-- Main Content -->
   <div class="flex flex-1">
-    <!-- Document Viewer -->
-    <div class="w-3/4 p-4">
+    <div class="w-full p-4">
+      <!-- Loading spinner -->
+      <div
+        *ngIf="loading"
+        class="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      >
+        <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+          <div class="spinner border-4 border-t-4 border-gray-200 border-t-blue-600 rounded-full w-12 h-12 mb-4 animate-spin"></div>
+          <p class="text-gray-700">Loading document...</p>
+        </div>
+      </div>
+
       <!-- PDF Viewer -->
-      <!-- <ngx-extended-pdf-viewer
-        *ngIf="selectedDoc?.viewer === 'pdf' && selectedDoc?.url"
-        [src]="selectedDoc?.url || ''"
-        [height]="'80vh'"
-        [showHandToolButton]="true"
-        [showDownloadButton]="false"
-        [showPrintButton]="false"
-        (pdfLoadingFailed)="onPdfLoadError($event)"
-        (pdfLoaded)="onPdfLoaded($event)"
-      ></ngx-extended-pdf-viewer> -->
-      <div *ngIf="selectedDoc?.viewer === 'pdf' && safeUrl" class="w-full h-[80vh]">
+      <div
+        *ngIf="selectedDoc?.viewer === 'pdf' && safeUrl"
+        class="w-full h-[80vh] bg-white shadow-md"
+      >
         <iframe [src]="safeUrl" class="w-full h-full" frameborder="0"></iframe>
       </div>
 
       <!-- Fallback for PDF -->
-      <!-- <div *ngIf="selectedDoc?.viewer === 'pdf' && pdfLoadError && safeUrl" class="w-full h-[80vh]">
-        <object [data]="safeUrl" type="application/pdf" class="w-full h-full">
-          <p>Your browser does not support PDFs. Please download the PDF to view it.</p>
-        </object>
-      </div> -->
-      <div *ngIf="selectedDoc?.viewer === 'pdf' && !safeUrl" class="p-4 bg-red-100 border border-red-300 rounded">
+      <div
+        *ngIf="selectedDoc?.viewer === 'pdf' && !safeUrl"
+        class="p-4 bg-red-100 border border-red-300 rounded"
+      >
         <p>Unable to load PDF. Please download it to view.</p>
       </div>
 
       <!-- Word Viewer -->
-      <ngx-doc-viewer
-        *ngIf="selectedDoc?.viewer === 'mammoth' && selectedDoc?.url"
-        [url]="selectedDoc?.url || ''"
-        viewer="mammoth"
-        class="w-full h-[80vh] bg-white border-gray-300 p-4 shadow-md"
-      ></ngx-doc-viewer>
+      <div 
+        *ngIf="selectedDoc?.viewer === 'mammoth'"
+        class="w-full h-[80vh] bg-white border-gray-300 p-4 shadow-md overflow-y-auto"
+      >
+        <div *ngIf="docxContent" [innerHTML]="docxContent | sanitizeHtml" class="mammoth-content"></div>
+        <div *ngIf="!docxContent && selectedDoc?.url">
+          <!-- Fallback to ngx-doc-viewer if custom rendering fails -->
+          <ngx-doc-viewer
+            [url]="selectedDoc?.url || ''"
+            viewer="mammoth"
+            class="w-full h-[75vh] overflow-y-auto"
+          ></ngx-doc-viewer>
+        </div>
+      </div>
 
       <!-- Excel Viewer -->
       <div
         *ngIf="selectedDoc?.viewer === 'custom' && excelData"
-        class="w-full h-[80vh] overflow-auto bg-white border border-gray-300 p-4"
+        class="w-full h-[80vh] overflow-auto bg-white border border-gray-300 p-4 shadow-md"
         [innerHTML]="excelData | sanitizeHtml"
-      ></div>
+      >
+      </div>
 
       <!-- Image Viewer -->
-      <div *ngIf="selectedDoc?.viewer === 'image' && safeUrl" class="w-full h-[80vh]">
-        <img [src]="safeUrl" alt="Document Image" class="w-full h-full object-contain" (error)="onImageLoadError($event)">
-      </div>
-
-      <!-- Loading/Error States -->
       <div
-        *ngIf="loading"
-        class="p-4 bg-yellow-100 border border-yellow-300 rounded"
+        *ngIf="selectedDoc?.viewer === 'image' && safeUrl"
+        class="w-full h-[80vh] flex justify-center items-center bg-gray-800"
       >
-        <p>Loading document...</p>
+        <div class="relative" [style.transform]="'scale(' + imageZoom + ')'">
+          <img
+            [src]="safeUrl"
+            alt="Document Image"
+            class="max-w-full max-h-[75vh] object-contain transition-transform"
+            (error)="onImageLoadError($event)"
+          />
+        </div>
       </div>
 
-      <div
-        *ngIf="error"
-        class="p-4 bg-red-100 border border-red-300 rounded"
-      >
-        <p>{{error}}</p>
-      </div>
-    </div>
-
-    <!-- Document Info Sidebar -->
-    <div class="w-1/4 p-4 bg-white shadow-sm border-l">
-      <h3 class="text-lg font-semibold mb-4">Document Info</h3>
-      <div class="space-y-2">
-        <p><strong>Name:</strong> {{ selectedDoc?.document?.documentName || 'Unknown' }}</p>
-        <p><strong>Type:</strong> {{ getDocumentType(selectedDoc?.type || '') }}</p>
-        <p><strong>Size:</strong> {{ selectedDoc?.document?.size ? (selectedDoc?.document.size / 1024).toFixed(2) + ' KB' : 'Unknown' }}</p>
-        <p><strong>Uploaded:</strong> {{ selectedDoc?.document?.uploadedAt | date:'shortDate' }}</p>
-      </div>
-      <div class="mt-6">
-        <h4 class="text-md font-semibold mb-2">Actions</h4>
-        <button 
-          class="w-full py-2 mb-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-          (click)="downloadDocument()"
-        >
-          Download
-        </button>
+      <!-- Error States -->
+      <div *ngIf="error" class="p-4 bg-red-100 border border-red-300 rounded mt-4">
+        <p>{{ error }}</p>
       </div>
     </div>
   </div>

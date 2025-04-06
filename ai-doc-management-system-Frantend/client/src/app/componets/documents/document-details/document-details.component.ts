@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { Component,  OnInit } from '@angular/core';
+import { ActivatedRoute, Router,  } from '@angular/router';
 import { DocumentComponent } from '../document/document.component';
-import { UploadDocumentsComponent } from '../upload-documents/upload-documents.component';
 import { DocumentService } from '../../../service/document.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,7 +8,7 @@ import { UsersService } from '../../../service/users.service';
 
 @Component({
   selector: 'app-document-details',
-  imports: [RouterOutlet, DocumentComponent, UploadDocumentsComponent,CommonModule,FormsModule],
+  imports: [ DocumentComponent, CommonModule,FormsModule],
   templateUrl: './document-details.component.html',
   styleUrl: './document-details.component.css',
 })
@@ -30,12 +29,12 @@ export class DocumentDetailsComponent implements OnInit {
     // console.log("user data : "+this.user);
     const navigation = this.router.getCurrentNavigation();
     this.receivedDocuments = navigation?.extras.state?.['documents'] || history.state.documents;
-    console.log('Received Documents:', this.receivedDocuments);
+    // console.log('Received Documents:', this.receivedDocuments);
   }
 
   ngOnInit() {
     this.user = this.userService.userData;
-    console.log("user data : "+this.user);
+    // console.log("user data : "+this.user);
     this.getDocuments();
   }
 
@@ -46,13 +45,13 @@ export class DocumentDetailsComponent implements OnInit {
         this.documents = data;
         this.filteredDocuments = data.data || [];
         this.user = this.documents.data[0].user.name
-        console.log('xxxx : ',this.user);
+        // console.log('xxxx : ',this.user);
         // console.log("filter : " + this.filterDocuments);
         
-        console.log('Document Data:', this.documents);
+        // console.log('Document Data:', this.documents);
       },
       error: (error) => {
-        console.error('Error fetching documents:', error);
+        // console.error('Error fetching documents:', error);
       }
     });
   }

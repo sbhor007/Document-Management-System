@@ -19,15 +19,19 @@ export class UploadDocumentsComponent {
   ) {
     const folderPar = this.route.snapshot.paramMap.get('folderId');
     this.folderId = folderPar ? parseInt(folderPar) : null;
-    console.log('Folder ID:', this.folderId);
+    // console.log('Folder ID:', this.folderId);
   }
 
   onFileSelected(event: any) {
     const files: FileList = event.target.files;
     for (let i = 0; i < files.length; i++) {
-      // if(files[i].type == 'application/pdf') {
-      // alert('Only PDF files are allowed');
-      this.uploadedFiles.push(files[i]);
+      if (this.isValidFile(files[i])) {
+        this.uploadedFiles.push(files[i]);
+      } else {
+        alert(`File rejected: ${files[i].name} - Folders and .exe files are not allowed`)
+        // console.warn(`File rejected: ${files[i].name} - Folders and .exe files are not allowed`);
+      }
+      // this.uploadedFiles.push(files[i]);
       // }
     }
   }
@@ -37,7 +41,13 @@ export class UploadDocumentsComponent {
     if (event.dataTransfer) {
       const files = event.dataTransfer.files;
       for (let i = 0; i < files.length; i++) {
-        this.uploadedFiles.push(files[i]);
+        if (this.isValidFile(files[i])) {
+          this.uploadedFiles.push(files[i]);
+        } else {
+          alert(`File rejected: ${files[i].name} - Folders and .exe files are not allowed`)
+          // console.warn(`File rejected: ${files[i].name} - Folders and .exe files are not allowed`);
+        }
+        // this.uploadedFiles.push(files[i]);
       }
     }
   }
@@ -56,20 +66,36 @@ export class UploadDocumentsComponent {
 
   uploadFiles() {
     if (this.uploadedFiles.length === 0 || !this.folderId) {
-      console.error('No files or folderId provided');
+      // console.error('No files or folderId provided');
       return;
     }
     this.documentService
       .uploadDocuments(this.uploadedFiles, this.folderId)
       .subscribe({
         next: (response) => {
-          console.log('Upload success', response);
+          // console.log('Upload success', response);
           this.uploadedFiles = [];
-          this.router.navigate(['/documents', this.folderId]);
+          alert('Files uploaded successfully!');
+          // this.router.navigate(['/documents', this.folderId]);
+         
         },
         error: (err) => {
-          console.error('Upload error', err);
+          alert("Fail to upload documents")
+          // console.error('Upload error', err);
         },
       });
+  }
+// TODO: For Checking if the file is valid or not
+  private isValidFile(file: File): boolean {
+    // Check if file has a name (folders typically don't have extensions)
+    if (!file.name || file.name === '') {
+      return false;
+    }
+    
+    // Check if file size is 0 (could indicate a folder) and reject .exe files
+    const isExecutable = file.name.toLowerCase().endsWith('.exe');
+    const isEmpty = file.size === 0;
+    
+    return !isExecutable && !isEmpty;
   }
 }

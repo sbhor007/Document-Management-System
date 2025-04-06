@@ -2,17 +2,24 @@
   <div class="w-64 bg-white border-r border-gray-200 p-4 flex flex-col">
     <!-- Main Menu -->
     <div class="flex-1">
+      <button
+      (click)="goHome($event)"
+      class="w-full shadow-md flex items-center text-nowrap overflow-hidden px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg font-bold"
+      
+    >Home</button>
       <ul class="space-y-2">
         <!-- @for(item of mainMenu; track item.label) { -->
-        <li *ngFor="let item of mainMenu">
+        <!-- <li *ngFor="let item of folders" class="bg-red-500">
+          {{ item.folderName }}
+          {{item.length}}
           <button
             class="w-full flex items-center px-2 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-            (click)="navigate(item.route)"
+            (click)="openFolder($event,item)"
           >
             <i [class]="item.icon"></i>
-            <span class="ml-3 text-sm font-medium">{{ item.label }}</span>
+            <span class="ml-3 text-sm font-medium">{{ item.folderName }}</span>
           </button>
-        </li>
+        </li> -->
         <!-- } -->
       </ul>
 
@@ -47,7 +54,7 @@
         <i class="fas fa-question-circle"></i>
         <span class="ml-3 text-sm font-medium">FAQs</span>
       </button> -->
-      <button
+      <!-- <button
         class="w-full flex items-center px-2 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
       >
         <i class="fas fa-users"></i>
@@ -56,7 +63,7 @@
           class="ml-auto text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded"
           >Basic</span
         >
-      </button>
+      </button> -->
       <button
         class="w-full flex items-center px-2 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
         (click)="logout()"

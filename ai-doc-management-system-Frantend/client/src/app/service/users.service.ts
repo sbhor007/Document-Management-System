@@ -8,8 +8,17 @@ import { Observable } from 'rxjs';
 export class UsersService {
   baseUrl = 'http://localhost:8080/api/auth';
   userData: any;
+  totalUsedStorage:number = 0
 
   constructor(private http:HttpClient) { }
+
+  calculateTotalStorage(size:number){
+    this.totalUsedStorage += size
+  }
+
+  getTotalUsedStorage(){
+    return this.totalUsedStorage
+  }
 
   getUser(): Observable<any>{
     return this.http.get(`${this.baseUrl}/user`)
@@ -21,4 +30,6 @@ export class UsersService {
   deleteUser(username:string):Observable<any>{
     return this.http.delete(`${this.baseUrl}/users/${username}`)
   }
+
+
 }

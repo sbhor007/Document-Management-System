@@ -3,12 +3,8 @@ import { OtpComponent } from "../otp/otp.component";
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-
 import { AuthService } from '../../service/auth.service';
 import { EmailServiceService } from '../../service/email-service.service';
-import { response } from 'express';
-import { subscribe } from 'diagnostics_channel';
-import { verify } from 'crypto';
 
 @Component({
   selector: 'app-register',
@@ -46,10 +42,10 @@ export class RegisterComponent {
     this.submitted = true;
     this.errorMessage = null;
 
-    console.log('Form submitted:', this.registerForm.value);
+    // console.log('Form submitted:', this.registerForm.value);
 
     if (this.registerForm.invalid) {
-      console.log('Form is invalid');
+      // console.log('Form is invalid');
       return;
     }
 
@@ -62,24 +58,25 @@ export class RegisterComponent {
     };
     this.registeredEmail = this.registerData.userName;
 
-    console.log('Register data:', this.registerData);
+    // console.log('Register data:', this.registerData);
 
     this.emailService.checkEmailExists(this.registeredEmail).subscribe({
       next: (response) => {
-        console.log('Email check response:', response);
+        // console.log('Email check response:', response);
         if (response.data === true) {
           this.loading = false;
           this.errorMessage = 'Email already exists. Please use a different email.';
         } else {
-          console.log('Email does not exist');
+          // console.log('Email does not exist');
           this.sendOtp(this.registeredEmail);
         }
       },
       error: (error) => {
-        console.error('Error checking email:', error);
+        // console.error('Error checking email:', error);
         this.loading = false;
         this
-        this.errorMessage = error.error?.message || 'Error checking email. Please try again.';
+        // this.errorMessage = error.error?.message || 'Error checking email. Please try again.';
+        this.errorMessage = 'Error checking email. Please try again.';
       }
     });
   }
@@ -88,14 +85,15 @@ export class RegisterComponent {
     console.log('Sending OTP to:', email);
     this.emailService.sendOtp(email).subscribe({
       next: () => {
-        console.log('OTP sent successfully');
+        // console.log('OTP sent successfully');
         this.loading = false;
         this.showOtpModal = true;
       },
       error: (error) => {
-        console.error('Failed to send OTP:', error);
+        // console.error('Failed to send OTP:', error);
         this.loading = false;
-        this.errorMessage = error.message || 'Failed to send OTP. Please try again.';
+        // this.errorMessage = error.message || 'Failed to send OTP. Please try again.';
+        this.errorMessage = 'Failed to send OTP. Please try again.';
       }
     });
   }
@@ -107,16 +105,17 @@ export class RegisterComponent {
 
     this.authService.registerUser(this.registerData).subscribe({
       next: (response) => {
-        console.log('User registered successfully:', response);
+        // console.log('User registered successfully:', response);
         this.loading = false;
         this.errorMessage = 'Registration successful!';
         setTimeout(() => {
           this.router.navigate(['/home/login']);
-        }, 2000);
+        }, 1000);
       },
       error: (error) => {
-        console.error('Registration failed:', error);
+        // console.error('Registration failed:', error);
         this.loading = false;
+        this.errorMessage = 'Registration failed. Please try again.';
         this.errorMessage = error.error?.message || 'Registration failed. Please try again.';
       }
     });

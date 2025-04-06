@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../../../service/users.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from '../../navbar/navbar.component';
-import { Router, RouterOutlet } from '@angular/router';
-import { UserNavbarComponent } from '../../user-navbar/user-navbar.component';
+import { Router } from '@angular/router';
 import { AuthService } from '../../../service/auth.service';
 
 @Component({
@@ -12,9 +10,6 @@ import { AuthService } from '../../../service/auth.service';
   imports: [
     FormsModule,
     CommonModule,
-    NavbarComponent,
-    RouterOutlet,
-    UserNavbarComponent,
   ],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.css',
@@ -26,12 +21,12 @@ export class AdminDashboardComponent implements OnInit {
   filteredUsers: any[] = [];
   loading: boolean = true;
   error: string | null = null;
-  isSortByName: boolean = false; // Flag to track sorting by name
-  isSortByEmail: boolean = false; // Flag to track sorting by roll
-  isSortByStorage: boolean = false; // Flag to track sorting by storage size
-  isSortByDocuments: boolean = false; // Flag to track sorting by documents
-  isSortByFolders: boolean = false; // Flag to track sorting by folders
-  isSortByDate: boolean = false; // Flag to track sorting by date
+  isSortByName: boolean = false; 
+  isSortByEmail: boolean = false; 
+  isSortByStorage: boolean = false; 
+  // isSortByDocuments: boolean = false; 
+  // isSortByFolders: boolean = false;
+  // isSortByDate: boolean = false; 
 
   constructor(
     private usersService: UsersService,
@@ -46,8 +41,8 @@ export class AdminDashboardComponent implements OnInit {
     }
     this.loadCurrentUser();
     this.loadAllUsers();
-    console.log('Current user:', this.user);
-    console.log('All users:', this.filteredUsers);
+    // console.log('Current user:', this.user);
+    // console.log('All users:', this.filteredUsers);
     
   }
 
@@ -59,7 +54,7 @@ export class AdminDashboardComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error fetching current user:', error);
+        // console.error('Error fetching current user:', error);
       },
     });
   }
@@ -75,7 +70,7 @@ export class AdminDashboardComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error fetching users:', error);
+        // console.error('Error fetching users:', error);
         this.error = 'Failed to load users. Please try again.';
         this.loading = false;
       },
@@ -98,8 +93,8 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   viewUser(user: any): void {
-    console.log('Viewing user details:', user);
-    // Implement navigation to user detail page or open modal
+    // console.log('Viewing user details:', user);
+    //TODO: Implement navigation to user detail page or open modal
   }
 
   deleteUser(username: string, event: Event): void {
@@ -112,9 +107,11 @@ export class AdminDashboardComponent implements OnInit {
         next: () => {
           this.allUsers = this.allUsers.filter(user => user.userName !== username);
           this.filteredUsers = this.filteredUsers.filter(user => user.userName !== username);
+          alert("User Deleted Successfully")
         },
         error: (error) => {
-          console.error('Error deleting user:', error);
+          alert("Error deleting user:")
+          // console.error('Error deleting user:', error);
         }
       });
     }
@@ -167,7 +164,6 @@ export class AdminDashboardComponent implements OnInit {
     this.isSortByStorage = !this.isSortByStorage;
     if (this.isSortByStorage) {
       this.filteredUsers.sort((a, b) => {
-      
         const sizeA = this.getUsedStorageSize(a);
         const sizeB = this.getUsedStorageSize(b);
         return sizeA - sizeB;

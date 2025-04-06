@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { AcceptFolderDetailsComponent } from "../accept-folder-details/accept-folder-details.component";
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -27,6 +27,7 @@ export class CreateFolderComponent {
 
   onFolderCreated() {
     this.folderCreated.emit();
+    alert('Folder Created Successfully');
     // this.toster.success('Folder Created Successfully');
     this.isVisible = false;
   }
@@ -36,6 +37,7 @@ export class CreateFolderComponent {
   }
   onFolderUpdate(){
     this.folderUpdated.emit();
+    alert('Folder Updated Successfully');
     // this.toster.success('Folder Created Successfully');
     this.isVisible = false;
   }

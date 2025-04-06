@@ -17,9 +17,7 @@ export class DocumentComponent implements OnInit {
   constructor(private router: Router, private documentService: DocumentService) {}
 
   ngOnInit(): void {
-    console.log("Document:", this.document);
-    
-    console.log('tttttt : ',this.documentService.openedDocument);
+    // console.log("Document:", this.document);
   }
 
   // Navigate to viewer instead of downloading
@@ -44,7 +42,7 @@ export class DocumentComponent implements OnInit {
         window.URL.revokeObjectURL(url);
       },
       error: (error) => {
-        console.error('Error downloading document:', error);
+        // console.error('Error downloading document:', error);
         alert('Failed to download document');
       }
     });
@@ -54,7 +52,7 @@ export class DocumentComponent implements OnInit {
     event.stopPropagation();
     const newName = prompt('Enter new name for document:', this.document.documentName);
     if (newName && newName.trim() !== '') {
-      console.log('Rename document to:', newName);
+      // console.log('Rename document to:', newName);
       alert('Rename functionality not implemented yet');
     }
   }
@@ -67,7 +65,7 @@ export class DocumentComponent implements OnInit {
           this.documentDeleted.emit();
         },
         error: (error) => {
-          console.error('Error deleting document:', error);
+          // console.error('Error deleting document:', error);
           alert('Failed to delete document');
         }
       });

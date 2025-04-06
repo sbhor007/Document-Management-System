@@ -12,3 +12,53 @@ table {
   th {
     background-color: #000000;
   }
+  /* Animation for the spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Excel viewer enhancements */
+::ng-deep .excel-sheet table {
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
+
+::ng-deep .excel-sheet td, 
+::ng-deep .excel-sheet th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+/* Word document viewer enhancements */
+::ng-deep .mammoth-content {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  padding: 10px;
+}
+
+::ng-deep .mammoth-content h1 {
+  color: #333;
+  border-bottom: 1px solid #eee;
+}
+
+::ng-deep .mammoth-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+::ng-deep .mammoth-content td, 
+::ng-deep .mammoth-content th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+/* Image viewer zoom transitions */
+.transition-transform {
+  transition: transform 0.2s ease-in-out;
+}
